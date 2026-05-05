@@ -11,6 +11,7 @@ export interface Game {
   genre: string;
   rating: number;
   thumbnail: string;
+  videoUrl?: string;
   gameUrl: string;
   description: string;
   isActive: boolean;

@@ -55,6 +55,8 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
   });
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string>('');
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [videoPreview, setVideoPreview] = useState<string>('');
 
   // Fetch categories
   const { data: categories = [] } = useQuery({
@@ -80,6 +82,8 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
       });
       setThumbnailFile(null);
       setThumbnailPreview('');
+      setVideoFile(null);
+      setVideoPreview('');
       onClose();
     },
     onError: (error: Error) => {
@@ -114,6 +118,18 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
       const reader = new FileReader();
       reader.onloadend = () => {
         setThumbnailPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setVideoFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setVideoPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -166,6 +182,9 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
     submitData.append('genre', formData.genre || 'General'); // Default genre if not provided
     submitData.append('rating', formData.rating);
     submitData.append('thumbnail', thumbnailFile);
+      if (videoFile) {
+      submitData.append('video', videoFile);
+    }
 
     createGameMutation.mutate(submitData);
   };
@@ -323,6 +342,49 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
                 </div>
               )}
 
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-slate-300 mb-2">
+              Preview Video (Optional)
+            </label>
+            
+            {/* File Upload Button */}
+            <div className="space-y-3">
+              <label className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 border-2 border-dashed border-slate-600 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-slate-700/50 transition-all">
+                <Upload className="w-5 h-5 text-slate-400" />
+                <span className="text-sm text-slate-300 font-medium">
+                  {videoFile ? videoFile.name : 'Click to upload video'}
+                </span>
+                <input
+                  type="file"
+                  accept="video/*"
+                  onChange={handleVideoChange}
+                  className="hidden"
+                />
+              </label>
+
+              {/* Video Preview */}
+              {videoPreview && (
+                <div className="relative w-full h-40 bg-slate-800 rounded-lg overflow-hidden border border-slate-600">
+                  <video
+                    src={videoPreview}
+                    className="w-full h-full object-cover"
+                    controls
+                  />
+                  <button
+                    onClick={() => {
+                      setVideoFile(null);
+                      setVideoPreview('');
+                    }}
+                    className="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
+                  >
+                    <X className="w-4 h-4 text-white cursor-pointer" />
+                  </button>
+                </div>
+              )}
+              <p className="text-xs text-slate-500">Plays on hover when users view the game card</p>
             </div>
           </div>
 
