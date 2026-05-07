@@ -57,6 +57,7 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
   const [thumbnailPreview, setThumbnailPreview] = useState<string>('');
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoPreview, setVideoPreview] = useState<string>('');
+  const [isScrolled, setIsScrolled] = useState(false);
 
   // Fetch categories
   const { data: categories = [] } = useQuery({
@@ -200,22 +201,25 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
       />
 
       {/* Drawer */}
-      <div className="absolute right-0 top-0 h-full w-full max-w-md bg-slate-900 border-l border-slate-700 shadow-xl flex flex-col animate-in slide-in-from-right duration-300">
+      <div className="absolute right-0 top-0 h-full w-full max-w-sm sm:max-w-md bg-slate-900 border-l border-slate-700 shadow-xl flex flex-col animate-in slide-in-from-right duration-300">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-slate-700">
-          <h2 className="text-xl font-bold text-white">Create Game</h2>
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-700 sticky top-0 bg-slate-900/95 backdrop-blur-sm z-10">
+          <h2 className="text-lg sm:text-xl font-bold text-white font-[nunito]">Create Game</h2>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-slate-800 rounded-lg transition-colors"
+            className="p-1.5 hover:bg-slate-800 rounded-lg transition-colors"
           >
             <X className="w-5 h-5 text-slate-400 cursor-pointer" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-4">
+        <div 
+          className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4"
+          onScroll={(e) => setIsScrolled((e.target as HTMLDivElement).scrollTop > 0)}
+        >
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-2">
+            <label className="block text-xs sm:text-sm font-semibold text-slate-300 mb-2">
               Game Title *
             </label>
             <input
@@ -223,14 +227,14 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
               name="title"
               value={formData.title}
               onChange={handleTitleChange}
-              className="w-full px-4 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
               placeholder="Enter game title"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-2">
+            <label className="block text-xs sm:text-sm font-semibold text-slate-300 mb-2">
               Slug (Auto-generated)
             </label>
             <input
@@ -238,21 +242,21 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
               name="slug"
               value={formData.slug}
               readOnly
-              className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-600 rounded-lg text-slate-400 placeholder-slate-500 focus:outline-none cursor-not-allowed"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-800/50 border border-slate-600 rounded-lg text-slate-400 placeholder-slate-500 text-xs sm:text-sm focus:outline-none cursor-not-allowed"
               placeholder="auto-generated-from-title"
             />
-            <p className="text-xs text-slate-500 mt-1">URL-friendly identifier</p>
+            <p className="text-[10px] sm:text-xs text-slate-500 mt-1">URL-friendly identifier</p>
           </div>
 
           <div>
-            <label className=" block text-sm font-semibold text-slate-300 mb-2">
+            <label className="block text-xs sm:text-sm font-semibold text-slate-300 mb-2">
               Category *
             </label>
             <select
               name="categoryId"
               value={formData.categoryId}
               onChange={handleInputChange}
-              className=" cursor-pointer w-full px-4 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+              className="cursor-pointer w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
               required
             >
               <option value="">Select category</option>
@@ -264,54 +268,39 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
             </select>
           </div>
 
-          {/* <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-2">
-              Genre *
-            </label>
-            <input
-              type="text"
-              name="genre"
-              value={formData.genre}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
-              placeholder="e.g., Action, Adventure, Puzzle"
-              required
-            />
-          </div> */}
-
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-2">
+            <label className="block text-xs sm:text-sm font-semibold text-slate-300 mb-2">
               Game URL *
             </label>
             <textarea
               name="gameUrl"
               value={formData.gameUrl}
               onChange={handleInputChange}
-              rows={4}
-              className="w-full px-4 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 resize-none font-mono text-xs"
+              rows={3}
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 text-[10px] sm:text-xs focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 resize-none font-mono"
               placeholder="Direct URL: https://example.com/game&#10;OR&#10;Iframe: <iframe src='https://example.com/game'></iframe>"
               required
             />
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-[10px] sm:text-xs text-slate-500 mt-1">
               Accepts direct URL or full iframe HTML code
             </p>
             {formData.gameUrl && formData.gameUrl.includes('syncframe') && (
-              <p className="text-xs text-amber-400 mt-1 flex items-center gap-1">
+              <p className="text-[10px] sm:text-xs text-amber-400 mt-1 flex items-center gap-1">
                 ⚠️ Warning: This looks like a tracking iframe, not a game URL
               </p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-2">
+            <label className="block text-xs sm:text-sm font-semibold text-slate-300 mb-2">
               Thumbnail Image *
             </label>
             
             {/* File Upload Button */}
             <div className="space-y-3">
-              <label className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 border-2 border-dashed border-slate-600 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-slate-700/50 transition-all">
-                <Upload className="w-5 h-5 text-slate-400" />
-                <span className="text-sm text-slate-300 font-medium">
+              <label className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border-2 border-dashed border-slate-600 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-slate-700/50 transition-all">
+                <Upload className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 shrink-0" />
+                <span className="text-xs sm:text-sm text-slate-300 font-medium truncate">
                   {thumbnailFile ? thumbnailFile.name : 'Click to upload image'}
                 </span>
                 <input
@@ -324,7 +313,7 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
 
               {/* Image Preview */}
               {thumbnailPreview && (
-                <div className="relative w-full h-40 bg-slate-800 rounded-lg overflow-hidden border border-slate-600">
+                <div className="relative w-full h-32 sm:h-40 bg-slate-800 rounded-lg overflow-hidden border border-slate-600">
                   <img
                     src={thumbnailPreview}
                     alt="Thumbnail preview"
@@ -335,26 +324,25 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
                       setThumbnailFile(null);
                       setThumbnailPreview('');
                     }}
-                    className="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
+                    className="absolute top-2 right-2 p-1 sm:p-1.5 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
                   >
-                    <X className="w-4 h-4 text-white cursor-pointer" />
+                    <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white cursor-pointer" />
                   </button>
                 </div>
               )}
-
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-2">
+            <label className="block text-xs sm:text-sm font-semibold text-slate-300 mb-2">
               Preview Video (Optional)
             </label>
             
             {/* File Upload Button */}
             <div className="space-y-3">
-              <label className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 border-2 border-dashed border-slate-600 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-slate-700/50 transition-all">
-                <Upload className="w-5 h-5 text-slate-400" />
-                <span className="text-sm text-slate-300 font-medium">
+              <label className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-800 border-2 border-dashed border-slate-600 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-slate-700/50 transition-all">
+                <Upload className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 shrink-0" />
+                <span className="text-xs sm:text-sm text-slate-300 font-medium truncate">
                   {videoFile ? videoFile.name : 'Click to upload video'}
                 </span>
                 <input
@@ -367,7 +355,7 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
 
               {/* Video Preview */}
               {videoPreview && (
-                <div className="relative w-full h-40 bg-slate-800 rounded-lg overflow-hidden border border-slate-600">
+                <div className="relative w-full h-32 sm:h-40 bg-slate-800 rounded-lg overflow-hidden border border-slate-600">
                   <video
                     src={videoPreview}
                     className="w-full h-full object-cover"
@@ -378,70 +366,54 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
                       setVideoFile(null);
                       setVideoPreview('');
                     }}
-                    className="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
+                    className="absolute top-2 right-2 p-1 sm:p-1.5 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
                   >
-                    <X className="w-4 h-4 text-white cursor-pointer" />
+                    <X className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white cursor-pointer" />
                   </button>
                 </div>
               )}
-              <p className="text-xs text-slate-500">Plays on hover when users view the game card</p>
+              <p className="text-[10px] sm:text-xs text-slate-500">Plays on hover when users view the game card</p>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-2">
+            <label className="block text-xs sm:text-sm font-semibold text-slate-300 mb-2">
               Description *
             </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleInputChange}
-              className="w-full px-4 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 resize-none"
+              className="w-full px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 text-xs sm:text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 resize-none"
               placeholder="Enter game description"
               rows={3}
               required
             />
           </div>
-{/* 
-          <div>
-            <label className="block text-sm font-semibold text-slate-300 mb-2">
-              Rating (0-10)
-            </label>
-            <input
-              type="number"
-              name="rating"
-              value={formData.rating}
-              onChange={handleInputChange}
-              min="0"
-              max="10"
-              step="0.1"
-              className="w-full px-4 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
-              placeholder="0.0"
-            />
-          </div> */}
         </div>
 
         {/* Footer */}
-        <div className="flex gap-3 p-6 border-t border-slate-700 bg-slate-800/50">
+        <div className={`flex gap-2 sm:gap-3 p-4 sm:p-6 border-t border-slate-700 bg-slate-800/50 sticky bottom-0 ${isScrolled ? 'shadow-lg shadow-slate-900/50' : ''}`}>
           <button
             onClick={onClose}
-            className=" cursor-pointer flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all duration-200"
+            className="cursor-pointer flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold text-xs sm:text-sm transition-all duration-200"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={createGameMutation.isPending}
-            className={` cursor-pointer flex-1 px-4 py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold transition-all duration-200 ${
+            className={`cursor-pointer flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold text-xs sm:text-sm transition-all duration-200 ${
               createGameMutation.isPending
                 ? 'opacity-50 cursor-not-allowed'
                 : 'hover:shadow-lg hover:shadow-purple-600/30'
             }`}
           >
             {createGameMutation.isPending ? (
-              <span className="flex items-center justify-center gap-2">
-                <div className=" cursor-pointer w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Creating...
+              <span className="flex items-center justify-center gap-1.5 sm:gap-2">
+                <div className="cursor-pointer w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                <span className="hidden sm:inline">Creating...</span>
+                <span className="sm:hidden">...</span>
               </span>
             ) : (
               'Create'

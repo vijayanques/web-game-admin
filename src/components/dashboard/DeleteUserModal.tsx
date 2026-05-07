@@ -28,7 +28,7 @@ export default function DeleteUserModal({
             <div className="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
               <AlertTriangle className="w-6 h-6 text-red-400" />
             </div>
-            <h2 className="text-lg font-bold text-white">Delete User</h2>
+            <h2 className="text-lg font-bold text-white font-[nunito]">Delete User</h2>
           </div>
           <button
             onClick={onClose}
@@ -40,10 +40,10 @@ export default function DeleteUserModal({
 
         {/* Content */}
         <div className="p-6 space-y-4">
-          <p className="text-slate-300">
-            Are you sure you want to delete the user <span className="font-semibold text-white">"{userName}"</span>?
+          <p className="text-slate-300 font-[nunito]">
+            Are you sure you want to delete the user <span className="font-semibold text-white font-[nunito]">"{userName}"</span>?
           </p>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-400 font-[nunito]">
             This action cannot be undone. All user data and game history will be permanently removed.
           </p>
         </div>
@@ -53,14 +53,14 @@ export default function DeleteUserModal({
           <button
             onClick={onClose}
             disabled={isLoading}
-            className="flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex-1 px-4 py-2.5 bg-slate-700 cursor-pointer hover:bg-slate-600 text-white rounded-lg font-[nunito] font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={isLoading}
-            className="flex-1 px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="flex-1 px-4 py-2.5 font-[nunito] cursor-pointer bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <>

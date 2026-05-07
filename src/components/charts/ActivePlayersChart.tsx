@@ -143,18 +143,12 @@ interface ActivePlayersChartProps {
 }
 
 export default function ActivePlayersChart({ data }: ActivePlayersChartProps) {
-  const peak = data.length > 0 ? Math.max(...data.map(d => d.value)) : 0;
-
-  const series = [
-    {
-      name: 'Active Players',
-      data: data.map(d => d.value),
-    },
-  ];
+  const series = data.map(d => d.value);
+  const labels = data.map(d => d.name);
 
   const options: any = {
     chart: {
-      type: 'area',
+      type: 'donut',
       toolbar: { show: false },
       background: 'transparent',
       animations: {
@@ -164,44 +158,69 @@ export default function ActivePlayersChart({ data }: ActivePlayersChartProps) {
         dynamicAnimation: { enabled: true, speed: 180 },
       },
     },
-    colors: ['#10b981'],
-    stroke: { curve: 'smooth', width: 3, lineCap: 'round' },
-    markers: {
-      size: 5,
-      colors: ['#10b981'],
-      strokeColors: '#0f172a',
-      strokeWidth: 2.5,
-      hover: { size: 8 },
+    colors: ['#ec4899', '#f43f5e', '#06b6d4', '#8b5cf6', '#10b981', '#14b8a6'],
+    stroke: {
+      width: 2,
+      colors: ['#0f172a'],
     },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.45,
-        opacityTo: 0.02,
-        stops: [0, 95],
-        colorStops: [
-          { offset: 0, color: '#10b981', opacity: 0.45 },
-          { offset: 95, color: '#10b981', opacity: 0.02 },
-        ],
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '65%',
+          labels: {
+            show: true,
+            name: {
+              show: true,
+              fontSize: '14px',
+              fontFamily: 'nunito',
+              color: '#94a3b8',
+            },
+            value: {
+              show: true,
+              fontSize: '18px',
+              fontFamily: 'nunito',
+              fontWeight: 600,
+              color: '#ffffff',
+              formatter: (v: number) => `${v.toLocaleString()}`,
+            },
+            total: {
+              show: true,
+              label: 'Total Players',
+              fontSize: '12px',
+              fontFamily: 'nunito',
+              color: '#64748b',
+              formatter: () => {
+                const total = series.reduce((a, b) => a + b, 0);
+                return `${total.toLocaleString()}`;
+              },
+            },
+          },
+        },
       },
     },
-    dataLabels: { enabled: false },
-    grid: {
-      borderColor: '#1e293b',
-      strokeDashArray: 5,
-      xaxis: { lines: { show: false } },
-      yaxis: { lines: { show: true } },
-      padding: { top: 0, right: 10, bottom: 0, left: 10 },
+    dataLabels: {
+      enabled: true,
+      formatter: (v: number) => `${v}%`,
+      style: {
+        fontSize: '11px',
+        fontFamily: 'nunito',
+        fontWeight: 600,
+        colors: ['#ffffff'],
+      },
     },
-    xaxis: {
-      categories: data.map(d => d.name),
-      labels: { style: { colors: '#64748b', fontSize: '11px', fontWeight: 600 } },
-      axisBorder: { show: false },
-      axisTicks: { show: false },
-    },
-    yaxis: {
-      labels: { style: { colors: '#64748b', fontSize: '11px', fontWeight: 600 } },
+    labels: labels,
+    legend: {
+      position: 'bottom',
+      fontSize: '12px',
+      fontFamily: 'nunito',
+      labels: {
+        colors: '#94a3b8',
+      },
+      markers: {
+        width: 8,
+        height: 8,
+        radius: 2,
+      },
     },
     tooltip: {
       theme: 'dark',
@@ -211,7 +230,7 @@ export default function ActivePlayersChart({ data }: ActivePlayersChartProps) {
   };
 
   return (
-    <div className="relative bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border border-slate-700/80 rounded-2xl p-6 overflow-hidden group transition-all duration-500 hover:border-emerald-500/40 hover:shadow-[0_0_40px_rgba(16,185,129,0.12)]">
+    <div className="relative bg-linear-to-br from-slate-900 via-slate-900 to-slate-800 border border-slate-700/80 rounded-lg sm:rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-6 overflow-hidden group transition-all duration-500 hover:border-emerald-500/40 hover:shadow-[0_0_40px_rgba(16,185,129,0.12)]">
       {/* Background dot grid */}
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none"
         style={{
@@ -221,32 +240,29 @@ export default function ActivePlayersChart({ data }: ActivePlayersChartProps) {
       />
 
       {/* Top accent */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/60 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-emerald-500/60 to-transparent" />
 
       {/* Corner glow */}
-      <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-emerald-600/10 blur-3xl group-hover:bg-emerald-500/20 transition-all duration-700 pointer-events-none" />
+      <div className="absolute -top-10 -right-10 w-32 sm:w-36 md:w-40 h-32 sm:h-36 md:h-40 rounded-full bg-emerald-600/10 blur-3xl group-hover:bg-emerald-500/20 transition-all duration-700 pointer-events-none" />
 
       <div className="relative z-10">
         {/* Header */}
-        <div className="flex items-start justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="relative w-9 h-9 shrink-0">
-              <div className="absolute inset-0 rounded-xl bg-emerald-500/20 animate-pulse" />
-              <div className="relative w-9 h-9 bg-gradient-to-br from-emerald-600 to-teal-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
-                <Zap className="w-4.5 h-4.5 text-white" style={{ width: 18, height: 18 }} />
+        <div className="flex items-start justify-between mb-4 sm:mb-5 md:mb-6">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="relative w-8 sm:w-9 h-8 sm:h-9 shrink-0">
+              <div className="absolute inset-0 rounded-lg sm:rounded-xl bg-emerald-500/20 animate-pulse" />
+              <div className="relative w-8 sm:w-9 h-8 sm:h-9 bg-linear-to-br from-emerald-600 to-teal-500 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/30">
+                <Zap className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
               </div>
             </div>
-            <div>
-              <h3 className="text-base font-bold text-white font-[nunito]">Active Players</h3>
-              <p className="text-slate-400 text-[13px]   font-[nunito] font-semibold">Real-time activity</p>
+            <div className="min-w-0">
+              <h3 className="text-sm sm:text-base font-bold text-white font-[nunito] truncate">Active Players</h3>
+              <p className="text-slate-400 text-[12px] sm:text-[13px] font-[nunito] font-semibold truncate">Real-time activity</p>
             </div>
           </div>
-
-          {/* Live + peak */}
-          
         </div>
 
-        <Chart options={options} series={series} type="area" height={300} />
+        <Chart options={options} series={series} type="donut" height={280} />
       </div>
     </div>
   );

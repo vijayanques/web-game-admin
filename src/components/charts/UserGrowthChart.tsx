@@ -247,7 +247,7 @@ export default function UserGrowthChart({ data }: UserGrowthChartProps) {
     : null;
 
   return (
-    <div className="relative bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border border-slate-700/80 rounded-2xl p-6 overflow-hidden group transition-all duration-500 hover:border-purple-500/40 ">
+    <div className="relative bg-linear-to-br from-slate-900 via-slate-900 to-slate-800 border border-slate-700/80 rounded-lg sm:rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-6 overflow-hidden group transition-all duration-500 hover:border-purple-500/40 ">
       {/* Background dot grid */}
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none"
         style={{
@@ -257,29 +257,29 @@ export default function UserGrowthChart({ data }: UserGrowthChartProps) {
       />
 
       {/* Top accent */}
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/60 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-px bg-linear-to-r from-transparent via-purple-500/60 to-transparent" />
 
       {/* Corner glow */}
-      <div className="absolute -top-10 -left-10 w-40 h-40 rounded-full bg-purple-600/10 blur-3xl group-hover:bg-purple-500/20 transition-all duration-700 pointer-events-none" />
+      <div className="absolute -top-10 -left-10 w-32 sm:w-36 md:w-40 h-32 sm:h-36 md:h-40 rounded-full bg-purple-600/10 blur-3xl group-hover:bg-purple-500/20 transition-all duration-700 pointer-events-none" />
 
       <div className="relative z-10">
         {/* Header */}
-        <div className="flex items-start justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <div className="relative w-9 h-9 shrink-0">
-              <div className="absolute inset-0 rounded-xl bg-purple-500/20 animate-pulse" />
-              <div className="relative w-9 h-9 bg-gradient-to-br from-purple-600 to-violet-500 rounded-xl flex items-center justify-center ">
-                <TrendingUp className="w-4.5 h-4.5 text-white" style={{ width: 18, height: 18 }} />
+        <div className="flex items-start justify-between mb-4 sm:mb-5 md:mb-6">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="relative w-8 sm:w-9 h-8 sm:h-9 shrink-0">
+              <div className="absolute inset-0 rounded-lg sm:rounded-xl bg-purple-500/20 animate-pulse" />
+              <div className="relative w-8 sm:w-9 h-8 sm:h-9 bg-linear-to-br from-purple-600 to-violet-500 rounded-lg sm:rounded-xl flex items-center justify-center ">
+                <TrendingUp className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-white" />
               </div>
             </div>
-            <div>
-              <h3 className="text-base font-bold text-white font-[nunito]">User Growth</h3>
-              <p className="text-slate-400 text-[13px]  font-medium font-[nunito] font-semibold">Monthly acquisition trend</p>
+            <div className="min-w-0">
+              <h3 className="text-sm sm:text-base font-bold text-white font-[nunito] truncate">User Growth</h3>
+              <p className="text-slate-400 text-[12px] sm:text-[13px] font-semibold font-[nunito] truncate">Monthly acquisition trend</p>
             </div>
           </div>
         </div>
 
-        <Chart options={options} series={series} type="area" height={300} />
+        <Chart options={options} series={series} type="area" height={250} />
       </div>
     </div>
   );

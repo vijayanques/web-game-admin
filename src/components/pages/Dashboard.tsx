@@ -131,7 +131,7 @@ export default function Dashboard() {
 
   if (isLoading) {
     return (
-      <div className="p-8 min-h-screen bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900 flex items-center justify-center">
+      <div className="p-8 min-h-screen bg-linear-to-br from-slate-950 via-slate-950 to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="relative w-16 h-16 mx-auto mb-6">
             <div className="absolute inset-0 rounded-full border-4 border-purple-500/20" />
@@ -151,7 +151,7 @@ export default function Dashboard() {
 
   if (error || !dashboardData) {
     return (
-      <div className="p-8 min-h-screen bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900 flex items-center justify-center">
+      <div className="p-8 min-h-screen bg-linear-to-br from-slate-950 via-slate-950 to-slate-900 flex items-center justify-center">
         <div className="text-center max-w-md p-8 bg-slate-900/80 border border-red-500/30 rounded-2xl">
           <div className="w-14 h-14 bg-red-500/10 border border-red-500/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <AlertCircle className="w-7 h-7 text-red-400" />
@@ -171,45 +171,43 @@ export default function Dashboard() {
   const dateStr = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900 overflow-hidden">
+    <div className="relative min-h-screen bg-linear-to-br from-slate-950 via-slate-950 to-slate-900 overflow-hidden">
       {/* Ambient floating orbs */}
       <div className="fixed top-20 left-10 w-72 h-72 rounded-full bg-purple-600/8 blur-[100px] pointer-events-none animate-pulse" style={{ animationDuration: '4s' }} />
       <div className="fixed bottom-20 right-10 w-80 h-80 rounded-full bg-pink-600/6 blur-[100px] pointer-events-none animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-blue-600/4 blur-[120px] pointer-events-none" />
 
-      <div className="relative z-10 p-6 md:p-8 space-y-8">
+      <div className="relative z-10 p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8">
 
         {/* ── Header ── */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="relative">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 sm:gap-3 mb-2">
+              <div className="relative shrink-0">
                 <div className="absolute inset-0 rounded-xl" />
-                <div className="relative w-11 h-11 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
+                <div className="relative w-10 h-10 sm:w-11 sm:h-11 bg-linear-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
                   <LayoutDashboard className="w-5 h-5 text-white" />
                 </div>
               </div>
-              <div>
-                <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+              <div className="min-w-0">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight truncate">
                   Dashboard
                 </h1>
-                <p className="text-slate-400 text-[13px] mt-1.5 font-medium font-[nunito]">Real-time analytics & insights</p>
+                <p className="text-slate-400 text-xs sm:text-[13px] mt-1 sm:mt-1.5 font-semibold font-[nunito] truncate">Real-time analytics & insights</p>
               </div>
             </div>
           </div>
-
-
         </div>
 
         {/* ── Section label ── */}
-        <div className="flex items-center gap-3">
-          <div className="h-px flex-1 bg-gradient-to-r from-purple-500/40 to-transparent" />
-          <span className="text-[12px] font-bold text-slate-400 uppercase tracking-[0.2em] font-[nunito]">Key Metrics</span>
-          <div className="h-px flex-1 bg-gradient-to-l from-purple-500/40 to-transparent" />
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="h-px flex-1 bg-linear-to-r from-purple-500/40 to-transparent" />
+          <span className="text-[11px] sm:text-[12px] font-bold text-slate-400 uppercase tracking-[0.15em] sm:tracking-[0.2em] font-[nunito] whitespace-nowrap">Key Metrics</span>
+          <div className="h-px flex-1 bg-linear-to-l from-purple-500/40 to-transparent" />
         </div>
 
         {/* ── Summary Cards ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
           <SummaryCard
             title="Total Users"
             value={stats.totalUsers.toLocaleString()}
@@ -240,23 +238,23 @@ export default function Dashboard() {
         </div>
 
         {/* ── Section label ── */}
-        <div className="flex items-center gap-3">
-          <div className="h-px flex-1 bg-gradient-to-r from-purple-500/40 to-transparent" />
-          <span className="text-[12px] font-bold text-slate-400 uppercase tracking-[0.2em] font-[nunito] ">Analytics</span>
-          <div className="h-px flex-1 bg-gradient-to-l from-purple-500/40 to-transparent" />
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="h-px flex-1 bg-linear-to-r from-purple-500/40 to-transparent" />
+          <span className="text-[11px] sm:text-[12px] font-bold text-slate-400 uppercase tracking-[0.15em] sm:tracking-[0.2em] font-[nunito] whitespace-nowrap">Analytics</span>
+          <div className="h-px flex-1 bg-linear-to-l from-purple-500/40 to-transparent" />
         </div>
 
         {/* ── Charts ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5">
           <UserGrowthChart data={dashboardData.userGrowthChart} />
           <ActivePlayersChart data={dashboardData.activePlayersChart} />
         </div>
 
         {/* ── Section label ── */}
-        <div className="flex items-center gap-3">
-          <div className="h-px flex-1 bg-gradient-to-r from-purple-500/40 to-transparent" />
-          <span className="text-[12px] font-bold text-slate-400 uppercase tracking-[0.2em] font-[nunito]">Recent Activity</span>
-          <div className="h-px flex-1 bg-gradient-to-l from-purple-500/40 to-transparent" />
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="h-px flex-1 bg-linear-to-r from-purple-500/40 to-transparent" />
+          <span className="text-[11px] sm:text-[12px] font-bold text-slate-400 uppercase tracking-[0.15em] sm:tracking-[0.2em] font-[nunito] whitespace-nowrap">Recent Activity</span>
+          <div className="h-px flex-1 bg-linear-to-l from-purple-500/40 to-transparent" />
         </div>
 
         {/* ── Recent Users ── */}

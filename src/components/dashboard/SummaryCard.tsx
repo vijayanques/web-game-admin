@@ -136,66 +136,66 @@ export default function SummaryCard({
   }, []);
 
   return (
-    <div className="group relative bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border border-slate-700/80 rounded-2xl p-6 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:border-purple-500/60 hover:shadow-[0_0_40px_rgba(139,92,246,0.25)]"
+    <div className="group relative bg-linear-to-br from-slate-900 via-slate-900 to-slate-800 border border-slate-700/80 rounded-lg sm:rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-6 overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:border-purple-500/60 hover:shadow-[0_0_40px_rgba(139,92,246,0.25)]"
       style={{ isolation: 'isolate' }}
     >
       {/* Particle canvas */}
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
       {/* Holographic shimmer sweep */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none overflow-hidden rounded-2xl">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/8 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none overflow-hidden rounded-lg sm:rounded-xl md:rounded-2xl">
+        <div className="absolute inset-0 bg-linear-to-r from-transparent via-purple-500/8 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
       </div>
 
       {/* Corner glow */}
-      <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full blur-3xl bg-purple-600/20 group-hover:bg-purple-500/35 transition-all duration-500" />
-      <div className="absolute -bottom-6 -left-6 w-24 h-24 rounded-full blur-3xl bg-pink-600/15 group-hover:bg-pink-500/30 transition-all duration-500" />
+      <div className="absolute -top-6 -right-6 w-20 sm:w-24 md:w-28 h-20 sm:h-24 md:h-28 rounded-full blur-3xl bg-purple-600/20 group-hover:bg-purple-500/35 transition-all duration-500" />
+      <div className="absolute -bottom-6 -left-6 w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24 rounded-full blur-3xl bg-pink-600/15 group-hover:bg-pink-500/30 transition-all duration-500" />
 
       {/* Top accent line */}
-      <div className="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-purple-500/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute top-0 left-4 sm:left-6 right-4 sm:right-6 h-px bg-linear-to-r from-transparent via-purple-500/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       <div className="relative z-10">
         {/* Header */}
-        <div className="flex items-start justify-between mb-5">
+        <div className="flex items-start justify-between mb-3 sm:mb-4 md:mb-5 gap-2">
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
-              <p className="text-slate-400 font-[nunito] text-xs font-bold uppercase tracking-[0.15em]">{title}</p>
+            <div className="flex items-center gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+              <div className="w-1 h-1 rounded-full bg-purple-400 animate-pulse shrink-0" />
+              <p className="text-slate-400 font-[nunito] text-[10px] sm:text-xs font-bold uppercase tracking-[0.12em] sm:tracking-[0.15em] truncate">{title}</p>
             </div>
-            <h3 className="text-4xl font-black text-white tracking-tight tabular-nums"
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight tabular-nums truncate"
               style={{ fontFamily: "nunito", textShadow: '0 0 30px rgba(168,85,247,0.3)' }}
             >
               {value}
             </h3>
             {subtitle && (
-              <p className="text-slate-500 text-xs mt-1.5 font-[nunito] font-bold">{subtitle}</p>
+              <p className="text-slate-500 text-[10px] sm:text-xs mt-1 sm:mt-1.5 font-[nunito] font-bold truncate">{subtitle}</p>
             )}
           </div>
 
           {/* Icon box with layered glow */}
-          <div className="relative shrink-0 ml-3">
-            <div className={`absolute inset-0 bg-gradient-to-br ${color} rounded-xl blur-md opacity-60 group-hover:opacity-90 transition-opacity duration-300`} />
-            <div className={`relative bg-gradient-to-br ${color} p-3 rounded-xl shadow-lg `}>
-              <Icon className="w-6 h-6 text-white" />
+          <div className="relative shrink-0 ml-2">
+            <div className={`absolute inset-0 bg-linear-to-br ${color} rounded-lg sm:rounded-xl blur-md opacity-60 group-hover:opacity-90 transition-opacity duration-300`} />
+            <div className={`relative bg-linear-to-br ${color} p-2 sm:p-2.5 md:p-3 rounded-lg sm:rounded-xl shadow-lg`}>
+              <Icon className="w-5 h-5 sm:w-5.5 md:w-6 text-white" style={{ width: 'auto', height: 'auto' }} />
             </div>
           </div>
         </div>
 
         {/* Divider with moving gradient */}
-        <div className="relative h-px mb-4 overflow-hidden rounded-full bg-slate-800">
-          <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-purple-600/60 to-pink-500/60 group-hover:w-full transition-all duration-700 ease-in-out" />
+        <div className="relative h-px mb-3 sm:mb-4 overflow-hidden rounded-full bg-slate-800">
+          <div className="absolute inset-y-0 left-0 w-1/2 bg-linear-to-r from-purple-600/60 to-pink-500/60 group-hover:w-full transition-all duration-700 ease-in-out" />
         </div>
 
         {/* Trend badge */}
-        <div className="flex items-center gap-2">
-          <div className={`flex items-center font-[nunito] gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold border ${trendUp
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+          <div className={`flex items-center font-[nunito] gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold border ${trendUp
             ? 'bg-green-500/10 border-green-500/30 text-green-400'
             : 'bg-red-500/10 border-red-500/30 text-red-400'
             }`}>
-            {trendUp ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
-            {trend}
+            {trendUp ? <TrendingUp className="w-3 h-3 sm:w-3.5 sm:h-3.5" /> : <TrendingDown className="w-3 h-3 sm:w-3.5 sm:h-3.5" />}
+            <span className="truncate">{trend}</span>
           </div>
-          <span className="text-slate-500 text-xs font-[nunito] font-semibold">vs last month</span>
+          <span className="text-slate-500 text-[10px] sm:text-xs font-[nunito] font-semibold whitespace-nowrap">vs last month</span>
         </div>
       </div>
     </div>
