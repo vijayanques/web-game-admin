@@ -10,6 +10,7 @@ export interface AdConfig {
   status: boolean;
   imageUrl?: string;
   targetUrl?: string;
+  allowedPages?: string[];
 }
 
 export const getAllAdConfigs = async () => {

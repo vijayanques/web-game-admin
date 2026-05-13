@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Edit, Trash2, ExternalLink } from 'lucide-react';
 import toast from 'react-hot-toast';
 import UpdatePageMetadataDrawer from './UpdatePageMetadataDrawer';
+import DeleteConfirmModal from '../common/DeleteConfirmModal';
 
 interface PageMetadata {
   id: number;
@@ -31,6 +32,7 @@ export default function PageMetadataList() {
   const queryClient = useQueryClient();
   const [selectedPage, setSelectedPage] = useState<PageMetadata | null>(null);
   const [updateDrawerOpen, setUpdateDrawerOpen] = useState(false);
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: 0, name: '' });
 
   // Fetch all page metadata
   const { data: pages = [], isLoading } = useQuery({
@@ -58,6 +60,7 @@ export default function PageMetadataList() {
     onSuccess: () => {
       toast.success('✅ Page metadata deleted successfully');
       queryClient.invalidateQueries({ queryKey: ['pageMetadata'] });
+      setDeleteModal({ isOpen: false, id: 0, name: '' });
     },
     onError: (error: any) => {
       toast.error(`❌ ${error.message || 'Failed to delete page metadata'}`);
@@ -72,9 +75,7 @@ export default function PageMetadataList() {
   };
 
   const handleDelete = (id: number, pageName: string) => {
-    if (confirm(`Are you sure you want to delete SEO metadata for "${pageName}"? This action cannot be undone.`)) {
-      deleteMutation.mutate(id);
-    }
+    setDeleteModal({ isOpen: true, id, name: pageName });
   };
 
   if (isLoading) {
@@ -158,6 +159,15 @@ export default function PageMetadataList() {
           page={selectedPage}
         />
       )}
+
+      <DeleteConfirmModal
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ isOpen: false, id: 0, name: '' })}
+        onConfirm={() => deleteMutation.mutate(deleteModal.id)}
+        title="Delete Page SEO"
+        message={`Are you sure you want to delete SEO metadata for "${deleteModal.name}"? This action cannot be undone.`}
+        isLoading={deleteMutation.isPending}
+      />
     </>
   );
 }

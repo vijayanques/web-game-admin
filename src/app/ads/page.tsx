@@ -7,10 +7,12 @@ import Sidebar from '@/components/layout/Sidebar';
 import Navbar from '@/components/layout/Navbar';
 import { getAllAdConfigs, upsertAdConfig, deleteAdConfig, AdConfig } from '@/lib/api/adsense';
 import toast from 'react-hot-toast';
+import DeleteConfirmModal from '@/components/common/DeleteConfirmModal';
 
 export default function AdsManagementPage() {
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: '', slot: '' });
   const [currentAd, setCurrentAd] = useState<Partial<AdConfig>>({
     slot: 'homepage_banner',
     adClient: '',
@@ -20,6 +22,7 @@ export default function AdsManagementPage() {
     adType: 'static',
     responsive: true,
     status: true,
+    allowedPages: ['home', 'game', 'category'],
   });
 
   const { data, isLoading } = useQuery({
@@ -45,6 +48,7 @@ export default function AdsManagementPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['adConfigs'] });
       toast.success('Ad configuration deleted successfully');
+      setDeleteModal({ isOpen: false, id: '', slot: '' });
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || 'Error deleting ad configuration');
@@ -61,6 +65,7 @@ export default function AdsManagementPage() {
       adType: 'static',
       responsive: true,
       status: true,
+      allowedPages: ['home', 'game', 'category'],
     });
   };
 
@@ -74,14 +79,15 @@ export default function AdsManagementPage() {
   };
 
   const handleEdit = (ad: AdConfig) => {
-    setCurrentAd(ad);
+    setCurrentAd({
+      ...ad,
+      allowedPages: ad.allowedPages || []
+    });
     setIsEditing(true);
   };
 
-  const handleDelete = (id: string) => {
-    if (confirm('Are you sure you want to delete this ad placement?')) {
-      deleteMutation.mutate(id);
-    }
+  const handleDelete = (id: string, slot: string) => {
+    setDeleteModal({ isOpen: true, id, slot });
   };
 
   const adPlacements = [
@@ -263,6 +269,42 @@ export default function AdsManagementPage() {
                     </label>
                   </div>
 
+                  {/* Page Targeting */}
+                  <div className="bg-slate-800/30 p-4 rounded-xl border border-slate-800 space-y-4">
+                     <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                        <LinkIcon className="w-4 h-4" /> Target Pages
+                     </h3>
+                     <div className="flex flex-wrap gap-6">
+                        {[
+                          { id: 'home', label: 'Homepage' },
+                          { id: 'game', label: 'Game Details' },
+                          { id: 'category', label: 'Categories' },
+                          { id: 'other', label: 'Other Pages' }
+                        ].map(page => (
+                          <label key={page.id} className="flex items-center gap-3 cursor-pointer group">
+                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-all ${currentAd.allowedPages?.includes(page.id) ? 'bg-purple-600 border-purple-600' : 'border-slate-600 group-hover:border-slate-500'}`}>
+                              {currentAd.allowedPages?.includes(page.id) && <Check className="w-3 h-3 text-white" />}
+                            </div>
+                            <input
+                              type="checkbox"
+                              className="hidden"
+                              checked={currentAd.allowedPages?.includes(page.id)}
+                              onChange={(e) => {
+                                const pages = currentAd.allowedPages || [];
+                                if (e.target.checked) {
+                                  setCurrentAd({ ...currentAd, allowedPages: [...pages, page.id] });
+                                } else {
+                                  setCurrentAd({ ...currentAd, allowedPages: pages.filter(p => p !== page.id) });
+                                }
+                              }}
+                            />
+                            <span className="text-sm text-slate-300">{page.label}</span>
+                          </label>
+                        ))}
+                     </div>
+                     <p className="text-[10px] text-slate-500 italic">If no pages are selected, the ad will show on all pages by default.</p>
+                  </div>
+
                   <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
                     <button
                       type="button"
@@ -316,6 +358,15 @@ export default function AdsManagementPage() {
                                  <LinkIcon className="w-3 h-3" /> Link
                                </a>
                              )}
+                             {ad.allowedPages && ad.allowedPages.length > 0 && (
+                               <div className="flex flex-wrap gap-1 mt-1">
+                                 {ad.allowedPages.map(page => (
+                                   <span key={page} className="text-[9px] px-1.5 py-0.5 bg-slate-800 border border-slate-700 rounded text-slate-500 uppercase tracking-tighter">
+                                     {page}
+                                   </span>
+                                 ))}
+                               </div>
+                             )}
                           </div>
                         </div>
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -326,7 +377,7 @@ export default function AdsManagementPage() {
                             <Edit2 className="w-4 h-4" />
                           </button>
                           <button
-                            onClick={() => handleDelete(ad.id!)}
+                            onClick={() => handleDelete(ad.id!, ad.slot)}
                             className="p-2 hover:bg-rose-500/10 text-rose-400 rounded-lg transition-colors"
                           >
                             <Trash2 className="w-4 h-4" />
@@ -361,6 +412,15 @@ export default function AdsManagementPage() {
           </div>
         </main>
       </div>
+
+      <DeleteConfirmModal 
+        isOpen={deleteModal.isOpen}
+        onClose={() => setDeleteModal({ isOpen: false, id: '', slot: '' })}
+        onConfirm={() => deleteMutation.mutate(deleteModal.id)}
+        title="Delete Ad Placement"
+        message={`Are you sure you want to delete the ad placement for "${deleteModal.slot.replace(/_/g, ' ')}"? This action cannot be undone.`}
+        isLoading={deleteMutation.isPending}
+      />
     </div>
   );
 }
