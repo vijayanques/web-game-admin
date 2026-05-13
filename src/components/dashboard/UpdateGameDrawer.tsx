@@ -6,6 +6,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Game, gameAPI } from '@/lib/api/games';
 import { categoryAPI } from '@/lib/api/categories';
 import toast from 'react-hot-toast';
+import SeoMetadataForm from '@/components/SeoMetadataForm';
+import { uploadToCloudinary } from '@/lib/cloudinary-upload';
 
 interface UpdateGameDrawerProps {
   isOpen: boolean;
@@ -40,6 +42,12 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoPreview, setVideoPreview] = useState<string>('');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [ogImageFile, setOgImageFile] = useState<File | null>(null);
+  const [twitterImageFile, setTwitterImageFile] = useState<File | null>(null);
+  const [ogImageUploading, setOgImageUploading] = useState(false);
+  const [twitterImageUploading, setTwitterImageUploading] = useState(false);
+  const [ogImagePreview, setOgImagePreview] = useState<string>('');
+  const [twitterImagePreview, setTwitterImagePreview] = useState<string>('');
 
   // Fetch categories
   const { data: categories = [], isLoading: categoriesLoading } = useQuery({
@@ -137,6 +145,68 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
     }
   };
 
+  // Handle OG image upload
+  const handleOgImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setOgImageFile(file);
+    setOgImageUploading(true);
+
+    try {
+      const result = await uploadToCloudinary(file, `theplayfree/seo/game`);
+      if (result.success && result.url) {
+        setOgImagePreview(result.url);
+        toast.success('OG image uploaded successfully');
+      } else {
+        toast.error(result.error || 'Failed to upload OG image');
+        setOgImageFile(null);
+      }
+    } catch (error) {
+      toast.error('Upload failed');
+      setOgImageFile(null);
+    } finally {
+      setOgImageUploading(false);
+    }
+  };
+
+  // Handle Twitter image upload
+  const handleTwitterImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setTwitterImageFile(file);
+    setTwitterImageUploading(true);
+
+    try {
+      const result = await uploadToCloudinary(file, `theplayfree/seo/game`);
+      if (result.success && result.url) {
+        setTwitterImagePreview(result.url);
+        toast.success('Twitter image uploaded successfully');
+      } else {
+        toast.error(result.error || 'Failed to upload Twitter image');
+        setTwitterImageFile(null);
+      }
+    } catch (error) {
+      toast.error('Upload failed');
+      setTwitterImageFile(null);
+    } finally {
+      setTwitterImageUploading(false);
+    }
+  };
+
+  // Clear OG image
+  const clearOgImage = () => {
+    setOgImagePreview('');
+    setOgImageFile(null);
+  };
+
+  // Clear Twitter image
+  const clearTwitterImage = () => {
+    setTwitterImagePreview('');
+    setTwitterImageFile(null);
+  };
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
@@ -176,7 +246,7 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -196,6 +266,15 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
 
     if (videoFile) {
       submitData.append('video', videoFile);
+    }
+
+    // Add SEO metadata with images if available
+    if (ogImagePreview || twitterImagePreview) {
+      const seoMetadata = {
+        ogImage: ogImagePreview,
+        twitterImage: twitterImagePreview,
+      };
+      submitData.append('seoMetadata', JSON.stringify(seoMetadata));
     }
 
     updateMutation.mutate(submitData);
@@ -393,6 +472,114 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
             />
           </div>
 
+          {/* Open Graph Image */}
+          <div className="border-t border-slate-700 pt-4 mt-4">
+            <label className="block text-sm font-semibold text-slate-300 mb-2">
+              Open Graph Image (Social Media)
+            </label>
+            <div className="space-y-3">
+              <label className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 border-2 border-dashed border-slate-600 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-slate-700/50 transition-all">
+                {ogImageUploading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
+                    <span className="text-sm text-slate-300 font-medium">Uploading...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-5 h-5 text-slate-400" />
+                    <span className="text-sm text-slate-300 font-medium">
+                      {ogImageFile ? ogImageFile.name : 'Click to upload OG image'}
+                    </span>
+                  </>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleOgImageUpload}
+                  disabled={ogImageUploading}
+                  className="hidden"
+                />
+              </label>
+
+              {ogImagePreview && (
+                <div className="relative w-full h-40 bg-slate-800 rounded-lg overflow-hidden border border-slate-600">
+                  <img
+                    src={ogImagePreview}
+                    alt="OG Image preview"
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    onClick={clearOgImage}
+                    className="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
+                  >
+                    <X className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              )}
+              <p className="text-xs text-slate-500">Recommended: 1200x630px. Max 5MB.</p>
+            </div>
+          </div>
+
+          {/* Twitter Card Image */}
+          <div className="border-t border-slate-700 pt-4 mt-4">
+            <label className="block text-sm font-semibold text-slate-300 mb-2">
+              Twitter Card Image
+            </label>
+            <div className="space-y-3">
+              <label className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 border-2 border-dashed border-slate-600 rounded-lg cursor-pointer hover:border-purple-500 hover:bg-slate-700/50 transition-all">
+                {twitterImageUploading ? (
+                  <>
+                    <Loader2 className="w-5 h-5 text-slate-400 animate-spin" />
+                    <span className="text-sm text-slate-300 font-medium">Uploading...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-5 h-5 text-slate-400" />
+                    <span className="text-sm text-slate-300 font-medium">
+                      {twitterImageFile ? twitterImageFile.name : 'Click to upload Twitter image'}
+                    </span>
+                  </>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleTwitterImageUpload}
+                  disabled={twitterImageUploading}
+                  className="hidden"
+                />
+              </label>
+
+              {twitterImagePreview && (
+                <div className="relative w-full h-40 bg-slate-800 rounded-lg overflow-hidden border border-slate-600">
+                  <img
+                    src={twitterImagePreview}
+                    alt="Twitter Image preview"
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    onClick={clearTwitterImage}
+                    className="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 rounded-full transition-colors"
+                  >
+                    <X className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              )}
+              <p className="text-xs text-slate-500">Recommended: 1200x630px. Max 5MB.</p>
+            </div>
+          </div>
+
+          {/* SEO Metadata Section */}
+          {game?.id && (
+            <div className="border-t border-slate-700 pt-4 mt-4">
+              <SeoMetadataForm
+                entityType="game"
+                entityId={game.id}
+                entityTitle={formData.title || game.title}
+                entitySlug={formData.slug || game.slug}
+              />
+            </div>
+          )}
+
         </div>
 
         {/* Footer */}
@@ -405,9 +592,10 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
             Cancel
           </button>
           <button
-            onClick={handleSubmit}
+            type="submit"
+            onClick={(e) => handleSubmit(e as any)}
             disabled={updateMutation.isPending}
-            className="flex-1 px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold flex items-center justify-center gap-2 disabled:opacity-50"
+            className="flex-1 px-4 py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {updateMutation.isPending ? (
               <>

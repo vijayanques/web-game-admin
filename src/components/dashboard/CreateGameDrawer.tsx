@@ -4,6 +4,7 @@ import { X, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
+import SeoMetadataForm from '@/components/SeoMetadataForm';
 
 interface CreateGameDrawerProps {
   isOpen: boolean;
@@ -58,6 +59,7 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoPreview, setVideoPreview] = useState<string>('');
   const [isScrolled, setIsScrolled] = useState(false);
+  const [createdGameId, setCreatedGameId] = useState<number | null>(null);
 
   // Fetch categories
   const { data: categories = [] } = useQuery({
@@ -68,9 +70,10 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
   // Create game mutation
   const createGameMutation = useMutation({
     mutationFn: createGame,
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success('Game created successfully!');
       queryClient.invalidateQueries({ queryKey: ['games'] });
+      setCreatedGameId(data.id);
       // Reset form
       setFormData({
         title: '',
@@ -85,7 +88,6 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
       setThumbnailPreview('');
       setVideoFile(null);
       setVideoPreview('');
-      onClose();
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to create game');
@@ -390,35 +392,55 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
               required
             />
           </div>
+
+          {/* SEO Metadata Section */}
+          <div className="border-t border-slate-700 pt-4 mt-4">
+            <h3 className="text-sm font-semibold text-slate-300 mb-3">SEO Metadata (Optional)</h3>
+            {createdGameId ? (
+              <SeoMetadataForm
+                entityType="game"
+                entityId={createdGameId}
+                entityTitle={formData.title}
+                entitySlug={formData.slug}
+              />
+            ) : (
+              <p className="text-xs text-slate-400">Create the game first to add SEO metadata</p>
+            )}
+          </div>
         </div>
 
         {/* Footer */}
         <div className={`flex gap-2 sm:gap-3 p-4 sm:p-6 border-t border-slate-700 bg-slate-800/50 sticky bottom-0 ${isScrolled ? 'shadow-lg shadow-slate-900/50' : ''}`}>
           <button
-            onClick={onClose}
+            onClick={() => {
+              setCreatedGameId(null);
+              onClose();
+            }}
             className="cursor-pointer flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold text-xs sm:text-sm transition-all duration-200"
           >
-            Cancel
+            {createdGameId ? 'Close' : 'Cancel'}
           </button>
-          <button
-            onClick={handleSubmit}
-            disabled={createGameMutation.isPending}
-            className={`cursor-pointer flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold text-xs sm:text-sm transition-all duration-200 ${
-              createGameMutation.isPending
-                ? 'opacity-50 cursor-not-allowed'
-                : 'hover:shadow-lg hover:shadow-purple-600/30'
-            }`}
-          >
-            {createGameMutation.isPending ? (
-              <span className="flex items-center justify-center gap-1.5 sm:gap-2">
-                <div className="cursor-pointer w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span className="hidden sm:inline">Creating...</span>
-                <span className="sm:hidden">...</span>
-              </span>
-            ) : (
-              'Create'
-            )}
-          </button>
+          {!createdGameId && (
+            <button
+              onClick={handleSubmit}
+              disabled={createGameMutation.isPending}
+              className={`cursor-pointer flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold text-xs sm:text-sm transition-all duration-200 ${
+                createGameMutation.isPending
+                  ? 'opacity-50 cursor-not-allowed'
+                  : 'hover:shadow-lg hover:shadow-purple-600/30'
+              }`}
+            >
+              {createGameMutation.isPending ? (
+                <span className="flex items-center justify-center gap-1.5 sm:gap-2">
+                  <div className="cursor-pointer w-3 h-3 sm:w-4 sm:h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span className="hidden sm:inline">Creating...</span>
+                  <span className="sm:hidden">...</span>
+                </span>
+              ) : (
+                'Create'
+              )}
+            </button>
+          )}
         </div>
       </div>
     </div>

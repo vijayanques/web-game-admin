@@ -3,6 +3,7 @@ import { apiClient } from './client';
 export interface Game {
   id: number;
   title: string;
+  slug?: string;
   categoryId: number;
   category?: {
     id: number;

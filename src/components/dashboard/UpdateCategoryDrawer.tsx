@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { X, Gamepad2, Zap, Shield, Wand2, Sword, Brain, Music, Trophy, Flame, Wind, Droplets, Sparkles, Target, Rocket, Crown, Dices } from 'lucide-react';
 import { useUpdateCategory } from '@/lib/hooks/useCategories';
 import { Category } from '@/lib/api/categories';
+import SeoMetadataForm from '@/components/SeoMetadataForm';
 
 interface UpdateCategoryDrawerProps {
   isOpen: boolean;
@@ -40,6 +41,7 @@ export default function UpdateCategoryDrawer({ isOpen, onClose, category }: Upda
     icon: '',
     isActive: true,
   });
+  const [seoSaved, setSeoSaved] = useState(false);
 
   const updateMutation = useUpdateCategory();
   const isSubmitting = updateMutation.isPending;
@@ -256,6 +258,19 @@ export default function UpdateCategoryDrawer({ isOpen, onClose, category }: Upda
             {updateMutation.isSuccess && (
               <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
                 <p className="text-sm text-green-400">Category updated successfully!</p>
+              </div>
+            )}
+
+            {/* SEO Metadata Section */}
+            {category?.id && (
+              <div className="border-t border-slate-700 pt-4 mt-4">
+                <SeoMetadataForm
+                  entityType="category"
+                  entityId={category.id}
+                  entityTitle={formData.name || category.name}
+                  entitySlug={formData.slug || category.slug}
+                  onSuccess={() => setSeoSaved(true)}
+                />
               </div>
             )}
 

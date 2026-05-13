@@ -1,12 +1,12 @@
 "use client";
 
 import { useRouter, usePathname } from 'next/navigation';
-import { LayoutDashboard, Users, Gamepad2, Tag, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Gamepad2, Tag, LogOut, FileText } from 'lucide-react';
 import { logoutAdmin } from '@/lib/api/auth';
 
 interface SidebarProps {
-  currentPage?: 'dashboard' | 'create-game' | 'users' | 'games' | 'categories';
-  onNavigate?: (page: 'dashboard' | 'create-game' | 'users' | 'games' | 'categories') => void;
+  currentPage?: 'dashboard' | 'create-game' | 'users' | 'games' | 'categories' | 'pages' | 'ads';
+  onNavigate?: (page: 'dashboard' | 'create-game' | 'users' | 'games' | 'categories' | 'pages' | 'ads') => void;
 }
 
 export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
@@ -18,9 +18,11 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
     { id: 'users', label: 'Users', icon: Users, href: '/users' },
     { id: 'games', label: 'Games', icon: Gamepad2, href: '/games' },
     { id: 'categories', label: 'Categories', icon: Tag, href: '/categories' },
+    { id: 'pages', label: 'Page SEO', icon: FileText, href: '/pages' },
+    { id: 'ads', label: 'Ads Management', icon: Tag, href: '/ads' },
   ];
 
-  const handleNavigate = (href: string, page: 'dashboard' | 'create-game' | 'users' | 'games' | 'categories') => {
+  const handleNavigate = (href: string, page: 'dashboard' | 'create-game' | 'users' | 'games' | 'categories' | 'pages' | 'ads') => {
     router.push(href);
     onNavigate?.(page);
   };
@@ -37,7 +39,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
           return (
             <button
               key={item.id}
-              onClick={() => handleNavigate(item.href, item.id as 'dashboard' | 'create-game' | 'users' | 'games' | 'categories')}
+              onClick={() => handleNavigate(item.href, item.id as 'dashboard' | 'create-game' | 'users' | 'games' | 'categories' | 'pages' | 'ads')}
               className={` cursor-pointer w-full flex items-center gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg transition-all duration-200 ${isActive
                   ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20'
                   : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
