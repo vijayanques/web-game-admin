@@ -42,17 +42,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Center - Search Bar */}
-      <div className="absolute left-1/2 -translate-x-1/2 w-full max-w-xl px-4 hidden md:block">
-        <div className="relative group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-hover:text-purple-400 transition-colors" />
-          <input
-            type="text"
-            placeholder="Search anything..."
-            className="w-full pl-10 pr-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-white text-sm placeholder:text-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all font-[nunito]"
-          />
-        </div>
-      </div>
+
 
       {/* Right side - Actions */}
       <div className="flex items-center gap-3 ml-auto">
@@ -85,7 +75,7 @@ export default function Navbar() {
                 <p className="text-xs text-slate-400 mt-1 font-[nunito]">admin@gameplatform.com</p>
               </div>
               <div className="p-2">
-                <button 
+                <button
                   onClick={handleLogout}
                   className="w-full px-4 py-2.5 text-left text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 flex items-center gap-3 transition-all duration-200 rounded-lg group font-[nunito]"
                 >
@@ -97,6 +87,6 @@ export default function Navbar() {
           )}
         </div>
       </div>
-    </nav>  
+    </nav>
   );
 }
