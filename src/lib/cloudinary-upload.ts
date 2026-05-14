@@ -61,8 +61,8 @@ export async function uploadToCloudinary(
     formData.append('folder', folder);
 
     // Get API URL
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.1.118:8000/api';
-    const uploadUrl = `${apiUrl}/upload/cloudinary`;
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    const uploadUrl = `${apiUrl}/api/upload/cloudinary`;
 
     // Upload via backend (which handles signing)
     const response = await fetch(uploadUrl, {
