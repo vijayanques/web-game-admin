@@ -313,9 +313,8 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
               type="text"
               value={formData.title}
               onChange={handleTitleChange}
-              className={`w-full px-4 py-2.5 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 ${
-                errors.title ? 'border-red-500' : 'border-slate-600'
-              }`}
+              className={`w-full px-4 py-2.5 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 ${errors.title ? 'border-red-500' : 'border-slate-600'
+                }`}
               placeholder="Enter game title"
             />
             {errors.title && <p className="text-xs text-red-400 mt-1">{errors.title}</p>}
@@ -344,9 +343,8 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
               value={formData.categoryId}
               onChange={handleInputChange}
               disabled={categoriesLoading}
-              className={`w-full px-4 py-2.5 bg-slate-800 border rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 ${
-                errors.categoryId ? 'border-red-500' : 'border-slate-600'
-              }`}
+              className={`w-full px-4 py-2.5 bg-slate-800 border rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 ${errors.categoryId ? 'border-red-500' : 'border-slate-600'
+                }`}
             >
               <option value={0}>Select category</option>
               {categories.map((c) => (
@@ -367,9 +365,8 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
               value={formData.gameUrl}
               onChange={handleInputChange}
               rows={4}
-              className={`w-full px-4 py-2.5 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 resize-none font-mono text-xs ${
-                errors.gameUrl ? 'border-red-500' : 'border-slate-600'
-              }`}
+              className={`w-full px-4 py-2.5 bg-slate-800 border rounded-lg text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 resize-none font-mono text-xs ${errors.gameUrl ? 'border-red-500' : 'border-slate-600'
+                }`}
             />
           </div>
 
@@ -473,7 +470,7 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
           </div>
 
           {/* Open Graph Image */}
-          <div className="border-t border-slate-700 pt-4 mt-4">
+          {/* <div className="border-t border-slate-700 pt-4 mt-4">
             <label className="block text-sm font-semibold text-slate-300 mb-2">
               Open Graph Image (Social Media)
             </label>
@@ -518,10 +515,10 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
               )}
               <p className="text-xs text-slate-500">Recommended: 1200x630px. Max 5MB.</p>
             </div>
-          </div>
+          </div> */}
 
           {/* Twitter Card Image */}
-          <div className="border-t border-slate-700 pt-4 mt-4">
+          {/* <div className="border-t border-slate-700 pt-4 mt-4">
             <label className="block text-sm font-semibold text-slate-300 mb-2">
               Twitter Card Image
             </label>
@@ -566,7 +563,7 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
               )}
               <p className="text-xs text-slate-500">Recommended: 1200x630px. Max 5MB.</p>
             </div>
-          </div>
+          </div> */}
 
           {/* SEO Metadata Section */}
           {game?.id && (
