@@ -56,12 +56,12 @@ export default function Navbar() {
         <div className="relative" ref={profileRef}>
           <button
             onClick={() => setShowProfileMenu(!showProfileMenu)}
-            className="flex items-center gap-2 px-3 py-2 hover:bg-slate-800 rounded-lg transition-all duration-200 group"
+            className="cursor-pointer flex items-center gap-2 px-3 py-2 hover:bg-slate-800 rounded-lg transition-all duration-200 group"
           >
-            <div className="w-8 h-8 bg-linear-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-purple-600/50 group-hover:shadow-purple-600/70 transition-all">
+            <div className=" cursor-pointer w-8 h-8 bg-linear-to-br from-purple-600 to-pink-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-purple-600/50 group-hover:shadow-purple-600/70 transition-all">
               AD
             </div>
-            <div className="hidden sm:block text-left">
+            <div className="hidden sm:block text-left cursor-pointer">
               <p className="text-sm font-semibold text-white font-[nunito]">Admin</p>
               <p className="text-xs text-slate-400 font-[nunito]">Super Admin</p>
             </div>
@@ -77,7 +77,7 @@ export default function Navbar() {
               <div className="p-2">
                 <button
                   onClick={handleLogout}
-                  className="w-full px-4 py-2.5 text-left text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 flex items-center gap-3 transition-all duration-200 rounded-lg group font-[nunito]"
+                  className="w-full px-4 cursor-pointer py-2.5 text-left text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 flex items-center gap-3 transition-all duration-200 rounded-lg group font-[nunito]"
                 >
                   <LogOut className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   Logout

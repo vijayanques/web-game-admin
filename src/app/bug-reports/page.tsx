@@ -43,8 +43,8 @@ export default function BugReportsPage() {
   const reports = response?.data || [];
 
   const filteredReports = reports.filter((r: any) => {
-    const matchesSearch = r.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          r.username.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = r.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      r.username.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === 'All' || r.status === filterStatus;
     return matchesSearch && matchesStatus;
   });
@@ -88,7 +88,7 @@ export default function BugReportsPage() {
 
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#0B0F19] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),rgba(255,255,255,0))]">
           <div className="max-w-7xl mx-auto space-y-8">
-            
+
             {/* Header */}
             <div>
               <h1 className="text-3xl font-black text-white flex items-center gap-3 font-[nunito]">
@@ -122,9 +122,9 @@ export default function BugReportsPage() {
             <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-lg flex flex-col sm:flex-row p-4 gap-4 justify-between">
               <div className="relative w-full sm:w-96">
                 <Search className="w-5 h-5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                <input 
-                  type="text" 
-                  placeholder="Search by title or user..." 
+                <input
+                  type="text"
+                  placeholder="Search by title or user..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="bg-slate-800 border border-slate-700 text-white pl-10 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:border-rose-500 transition-colors w-full font-[nunito]"
@@ -135,11 +135,10 @@ export default function BugReportsPage() {
                   <button
                     key={tab}
                     onClick={() => setFilterStatus(tab)}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold font-[nunito] transition-all whitespace-nowrap ${
-                      filterStatus === tab 
-                      ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20' 
+                    className={`cursor-pointer px-4 py-2 rounded-lg text-sm font-bold font-[nunito] transition-all whitespace-nowrap ${filterStatus === tab
+                      ? 'bg-rose-500 text-white shadow-lg shadow-rose-500/20'
                       : 'text-slate-400 hover:text-white hover:bg-slate-700'
-                    }`}
+                      }`}
                   >
                     {tab}
                   </button>
@@ -190,13 +189,13 @@ export default function BugReportsPage() {
                           <div className="text-xs text-slate-500">{new Date(report.createdAt).toLocaleTimeString()}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right">
-                          <button 
+                          <button
                             onClick={() => {
                               setSelectedReport(report);
                               setUpdateStatus(report.status);
                               setAdminNote('');
                             }}
-                            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm font-bold transition-colors font-[nunito]"
+                            className="cursor-pointer px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-sm font-bold transition-colors font-[nunito]"
                           >
                             View & Update
                           </button>
@@ -218,26 +217,26 @@ export default function BugReportsPage() {
       {selectedReport && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col">
-            
+
             <div className="p-6 border-b border-slate-800 flex justify-between items-center sticky top-0 bg-slate-900/95 backdrop-blur z-10">
               <h2 className="text-xl font-black text-white font-[nunito] flex items-center gap-2">
                 <Bug className="w-6 h-6 text-rose-500" />
                 Report Details
               </h2>
               <button onClick={() => setSelectedReport(null)} className="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-xl transition-colors">
-                <X className="w-5 h-5" />
+                <X className="cursor-pointer w-5 h-5" />
               </button>
             </div>
 
             <div className="p-6 space-y-8 flex-1">
-              
+
               {/* User Report Info */}
               <div className="space-y-4">
                 <div>
                   <h3 className="text-lg font-bold text-white font-[nunito]">{selectedReport.title}</h3>
                   <p className="text-sm text-slate-400 font-[nunito] mt-1">Reported by <span className="text-cyan-400 font-bold">{selectedReport.username}</span> on {new Date(selectedReport.createdAt).toLocaleString()}</p>
                 </div>
-                
+
                 <div className="bg-slate-800/50 border border-slate-700/50 rounded-2xl p-4">
                   <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap font-[nunito]">
                     {selectedReport.description}
@@ -260,10 +259,10 @@ export default function BugReportsPage() {
                 <form onSubmit={handleUpdateStatus} className="space-y-4">
                   <div>
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 font-[nunito]">Status</label>
-                    <select 
+                    <select
                       value={updateStatus}
                       onChange={(e) => setUpdateStatus(e.target.value)}
-                      className="w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-rose-500 transition-colors font-[nunito]"
+                      className="cursor-pointer w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-rose-500 transition-colors font-[nunito]"
                     >
                       <option value="Pending">Pending</option>
                       <option value="In Progress">In Progress</option>
@@ -272,17 +271,17 @@ export default function BugReportsPage() {
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 font-[nunito]">Admin Note (sent to timeline)</label>
-                    <textarea 
+                    <textarea
                       value={adminNote}
                       onChange={(e) => setAdminNote(e.target.value)}
                       placeholder="E.g., We have identified the issue and are working on a fix..."
                       className="w-full bg-slate-800 border border-slate-700 text-white px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-rose-500 transition-colors font-[nunito] h-24 resize-none"
                     />
                   </div>
-                  <button 
+                  <button
                     type="submit"
                     disabled={updateMutation.isPending}
-                    className="w-full bg-rose-500 hover:bg-rose-600 text-white font-black py-3 rounded-xl transition-colors font-[nunito] disabled:opacity-50"
+                    className="cursor-pointer w-full bg-rose-500 hover:bg-rose-600 text-white font-black py-3 rounded-xl transition-colors font-[nunito] disabled:opacity-50"
                   >
                     {updateMutation.isPending ? 'Updating...' : 'Update Report Status'}
                   </button>
@@ -296,18 +295,16 @@ export default function BugReportsPage() {
                   <div className="space-y-4 border-l-2 border-slate-800 ml-3 pl-5 relative">
                     {selectedReport.history.map((item: any, idx: number) => (
                       <div key={idx} className="relative">
-                        <div className={`absolute -left-[27px] w-3 h-3 rounded-full border-2 border-slate-900 ${
-                          item.status === 'Pending' ? 'bg-rose-500' :
+                        <div className={`absolute -left-[27px] w-3 h-3 rounded-full border-2 border-slate-900 ${item.status === 'Pending' ? 'bg-rose-500' :
                           item.status === 'In Progress' ? 'bg-amber-500' :
-                          'bg-emerald-500'
-                        }`} />
+                            'bg-emerald-500'
+                          }`} />
                         <p className="text-xs text-slate-500 font-[nunito] mb-1">{new Date(item.timestamp).toLocaleString()}</p>
                         <div className="bg-slate-800/50 border border-slate-700/50 rounded-xl p-3 inline-block">
-                          <span className={`text-xs font-bold mb-1 block ${
-                            item.status === 'Pending' ? 'text-rose-400' :
+                          <span className={`text-xs font-bold mb-1 block ${item.status === 'Pending' ? 'text-rose-400' :
                             item.status === 'In Progress' ? 'text-amber-400' :
-                            'text-emerald-400'
-                          }`}>{item.status}</span>
+                              'text-emerald-400'
+                            }`}>{item.status}</span>
                           <p className="text-sm text-slate-300 font-[nunito]">{item.message}</p>
                         </div>
                       </div>

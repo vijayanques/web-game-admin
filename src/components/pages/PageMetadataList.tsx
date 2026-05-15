@@ -33,7 +33,7 @@ export default function PageMetadataList() {
   const [selectedPage, setSelectedPage] = useState<PageMetadata | null>(null);
   const [updateDrawerOpen, setUpdateDrawerOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: 0, name: '' });
-  
+
   // Filters and Pagination
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,7 +54,7 @@ export default function PageMetadataList() {
     setCurrentPage(1);
   }, [searchTerm]);
 
-  const filteredPages = pages.filter((page: PageMetadata) => 
+  const filteredPages = pages.filter((page: PageMetadata) =>
     page.pageName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     page.pageSlug.toLowerCase().includes(searchTerm.toLowerCase()) ||
     (page.metaTitle && page.metaTitle.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -152,9 +152,8 @@ export default function PageMetadataList() {
                 {paginatedPages.map((page: PageMetadata, index: number) => (
                   <tr
                     key={page.id}
-                    className={`border-b border-slate-700/40 hover:bg-slate-800/40 transition-all duration-200 group ${
-                      index === paginatedPages.length - 1 ? 'border-b-0' : ''
-                    }`}
+                    className={`border-b border-slate-700/40 hover:bg-slate-800/40 transition-all duration-200 group ${index === paginatedPages.length - 1 ? 'border-b-0' : ''
+                      }`}
                   >
                     <td className="px-4 md:px-6 py-3 sm:py-4">
                       <div className="flex items-center gap-2">
@@ -185,7 +184,7 @@ export default function PageMetadataList() {
                       <div className="flex items-center justify-center gap-2">
                         <button
                           onClick={() => handleEdit(page)}
-                          className="p-1.5 sm:p-2 hover:bg-yellow-500/20 rounded-lg transition-all duration-200 hover:scale-110 group/btn shrink-0"
+                          className="cursor-pointer p-1.5 sm:p-2 hover:bg-yellow-500/20 rounded-lg transition-all duration-200 hover:scale-110 group/btn shrink-0"
                           title="Edit"
                         >
                           <Edit className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-400 group-hover/btn:text-yellow-300" />
@@ -193,7 +192,7 @@ export default function PageMetadataList() {
                         <button
                           onClick={() => handleDelete(page.id, page.pageName)}
                           disabled={deleteMutation.isPending}
-                          className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg transition-all duration-200 hover:scale-110 group/btn shrink-0 disabled:opacity-50"
+                          className="cursor-pointer p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg transition-all duration-200 hover:scale-110 group/btn shrink-0 disabled:opacity-50"
                           title="Delete"
                         >
                           {deleteMutation.isPending ? (
@@ -220,14 +219,14 @@ export default function PageMetadataList() {
             </div>
 
             <div className="flex items-center gap-2 order-1 sm:order-2">
-              <button 
+              <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
                 className="p-1.5 sm:p-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
-              
+
               <div className="flex items-center gap-1 mx-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   let pageNum;
@@ -240,16 +239,15 @@ export default function PageMetadataList() {
                   } else {
                     pageNum = currentPage - 2 + i;
                   }
-                  
+
                   return (
                     <button
                       key={pageNum}
                       onClick={() => setCurrentPage(pageNum)}
-                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center font-bold transition-all font-[nunito] ${
-                        currentPage === pageNum 
-                          ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20' 
-                          : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
-                      }`}
+                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center font-bold transition-all font-[nunito] ${currentPage === pageNum
+                        ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20'
+                        : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                        }`}
                     >
                       {pageNum}
                     </button>
@@ -257,7 +255,7 @@ export default function PageMetadataList() {
                 })}
               </div>
 
-              <button 
+              <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages || totalPages === 0}
                 className="p-1.5 sm:p-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"

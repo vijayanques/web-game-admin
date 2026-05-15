@@ -111,7 +111,7 @@ export default function CreatePageMetadataDrawer({ isOpen, onClose }: CreatePage
 
       <div className="absolute right-0 top-0 h-full w-full max-w-md bg-slate-900 border-l border-slate-700 shadow-xl flex flex-col animate-in slide-in-from-right duration-300">
         <div className="flex items-center justify-between p-6 border-b border-slate-700">
-          <h2 className="text-xl font-bold text-white">Add Page SEO</h2>
+          <h2 className="text-xl font-bold text-white ">Add Page SEO</h2>
           <button onClick={handleClose} className="p-1 hover:bg-slate-800 rounded-lg transition-colors">
             <X className="w-5 h-5 text-slate-400" />
           </button>
@@ -127,7 +127,7 @@ export default function CreatePageMetadataDrawer({ isOpen, onClose }: CreatePage
                 <select
                   value={selectedPage}
                   onChange={(e) => setSelectedPage(e.target.value)}
-                  className="w-full px-4 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
+                  className="cursor-pointer w-full px-4 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
                 >
                   <option value="">Choose a page...</option>
                   {PREDEFINED_PAGES.map((page) => (
@@ -195,7 +195,7 @@ export default function CreatePageMetadataDrawer({ isOpen, onClose }: CreatePage
         <div className="flex gap-3 p-6 border-t border-slate-700 bg-slate-800/50">
           <button
             onClick={handleClose}
-            className="flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold"
+            className="cursor-pointer flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold"
           >
             {createdPageId ? 'Close' : 'Cancel'}
           </button>
@@ -203,7 +203,7 @@ export default function CreatePageMetadataDrawer({ isOpen, onClose }: CreatePage
             <button
               onClick={handleCreate}
               disabled={!selectedPage || createMutation.isPending}
-              className="flex-1 px-4 py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold disabled:opacity-50"
+              className="cursor-pointer flex-1 px-4 py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold disabled:opacity-50"
             >
               {createMutation.isPending ? 'Creating...' : 'Create & Add SEO'}
             </button>

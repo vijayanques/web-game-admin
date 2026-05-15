@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 import Sidebar from '@/components/layout/Sidebar';
 import Navbar from '@/components/layout/Navbar';
 import TrafficChart from '@/components/charts/TrafficChart';
-import { 
-  Activity, Users, UserCheck, PlayCircle, CheckCircle2, 
-  Smartphone, Monitor, Laptop, Chrome, Compass, 
-  Globe, Clock, Search, Filter 
+import {
+  Activity, Users, UserCheck, PlayCircle, CheckCircle2,
+  Smartphone, Monitor, Laptop, Chrome, Compass,
+  Globe, Clock, Search, Filter
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 
@@ -33,9 +33,9 @@ export default function TrafficPage() {
   const stats = trafficData?.stats || { pageVisits: 0, totalVisitors: 0, onlineUsers: 0, gamesStarted: 0, gamesCompleted: 0, avgSessionTime: '0m 0s' };
   const devices = trafficData?.devices || { mobile: 0, desktop: 0, other: 0 };
   const browsers = trafficData?.browsers || { chrome: 0, safari: 0, firefox: 0, edge: 0, other: 0 };
-  
+
   // Filtering and Pagination
-  const filteredActivities = recentActivities.filter((activity: any) => 
+  const filteredActivities = recentActivities.filter((activity: any) =>
     (activity.username || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (activity.page || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (activity.ipAddress || '').includes(searchTerm)
@@ -43,7 +43,7 @@ export default function TrafficPage() {
 
   const totalPages = Math.ceil(filteredActivities.length / itemsPerPage);
   const paginatedActivities = filteredActivities.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
-  
+
   const totalDevices = (devices.mobile + devices.desktop + devices.other) || 1;
   const totalBrowsers = (browsers.chrome + browsers.safari + browsers.firefox + browsers.edge + browsers.other) || 1;
 
@@ -77,7 +77,7 @@ export default function TrafficPage() {
 
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#0B0F19] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),rgba(255,255,255,0))]">
           <div className="max-w-7xl mx-auto space-y-8">
-            
+
             {/* Header */}
             <div>
               <h1 className="text-3xl font-black text-white flex items-center gap-3 font-[nunito]">
@@ -177,17 +177,16 @@ export default function TrafficPage() {
                   <h3 className="text-xl font-bold text-white font-[nunito]">Traffic Overview</h3>
                   <p className="text-slate-400 text-sm font-[nunito]">Visitors and page views over time</p>
                 </div>
-                
+
                 <div className="flex bg-slate-800 p-1 rounded-xl">
                   {(['daily', 'weekly', 'monthly'] as const).map(tab => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`px-4 py-2 rounded-lg text-sm font-bold font-[nunito] capitalize transition-all ${
-                        activeTab === tab 
-                        ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20' 
+                      className={`px-4 py-2 rounded-lg text-sm font-bold font-[nunito] capitalize transition-all ${activeTab === tab
+                        ? 'bg-cyan-500 text-white shadow-lg shadow-cyan-500/20'
                         : 'text-slate-400 hover:text-white hover:bg-slate-700'
-                      }`}
+                        }`}
                     >
                       {tab}
                     </button>
@@ -211,9 +210,9 @@ export default function TrafficPage() {
                 <div className="flex items-center gap-2">
                   <div className="relative">
                     <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    <input 
-                      type="text" 
-                      placeholder="Search users..." 
+                    <input
+                      type="text"
+                      placeholder="Search users..."
                       value={searchTerm}
                       onChange={(e) => {
                         setSearchTerm(e.target.value);
@@ -222,9 +221,9 @@ export default function TrafficPage() {
                       className="bg-slate-800 border border-slate-700 text-white pl-9 pr-4 py-2 rounded-lg text-sm focus:outline-none focus:border-cyan-500 transition-colors w-full sm:w-64"
                     />
                   </div>
-                  <button className="p-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 text-slate-300 transition-colors">
+                  {/* <button className="p-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 text-slate-300 transition-colors">
                     <Filter className="w-4 h-4" />
-                  </button>
+                  </button> */}
                 </div>
               </div>
 
@@ -249,7 +248,7 @@ export default function TrafficPage() {
                             </div>
                             <div>
                               <div className="text-sm font-bold text-white font-[nunito]">{activity.username || 'Guest'}</div>
-                              <div className="text-xs text-slate-500 font-mono">{activity.ipAddress}</div>
+                              {/* <div className="text-xs text-slate-500 font-mono">{activity.ipAddress}</div> */}
                             </div>
                           </div>
                         </td>
@@ -261,21 +260,20 @@ export default function TrafficPage() {
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center gap-2">
                             <span className="flex items-center gap-1 text-xs text-slate-400 bg-slate-800/50 px-2 py-1 rounded">
-                              {activity.device === 'mobile' ? <Smartphone size={12}/> : activity.device === 'desktop' ? <Monitor size={12}/> : <Laptop size={12}/>}
+                              {activity.device === 'mobile' ? <Smartphone size={12} /> : activity.device === 'desktop' ? <Monitor size={12} /> : <Laptop size={12} />}
                               <span className="capitalize">{activity.device}</span>
                             </span>
                             <span className="flex items-center gap-1 text-xs text-slate-400 bg-slate-800/50 px-2 py-1 rounded">
-                              <Compass size={12}/>
+                              <Compass size={12} />
                               <span className="capitalize">{activity.browser}</span>
                             </span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold capitalize border ${
-                            activity.action === 'game_started' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
+                          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold capitalize border ${activity.action === 'game_started' ? 'bg-orange-500/10 text-orange-400 border-orange-500/20' :
                             activity.action === 'game_completed' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
-                            'bg-blue-500/10 text-blue-400 border-blue-500/20'
-                          }`}>
+                              'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                            }`}>
                             {activity.action === 'game_started' && <PlayCircle size={12} />}
                             {activity.action === 'game_completed' && <CheckCircle2 size={12} />}
                             {activity.action === 'page_view' && <Globe size={12} />}
@@ -297,23 +295,23 @@ export default function TrafficPage() {
                   </tbody>
                 </table>
               </div>
-              
+
               <div className="p-4 border-t border-slate-800 bg-slate-900/50 flex items-center justify-between">
                 <div className="text-sm text-slate-400 font-[nunito]">
                   Showing {filteredActivities.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to {Math.min(filteredActivities.length, currentPage * itemsPerPage)} of {filteredActivities.length} entries
                 </div>
                 <div className="flex gap-2">
-                  <button 
+                  <button
                     onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
-                    className="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700 font-[nunito] text-sm font-semibold transition-colors"
+                    className="cursor-pointer px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700 font-[nunito] text-sm font-semibold transition-colors"
                   >
                     Previous
                   </button>
-                  <button 
+                  <button
                     onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages || totalPages === 0}
-                    className="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700 font-[nunito] text-sm font-semibold transition-colors"
+                    className="cursor-pointer px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg border border-slate-700 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700 font-[nunito] text-sm font-semibold transition-colors"
                   >
                     Next
                   </button>

@@ -79,13 +79,13 @@ export default function CategoriesTable() {
 
   const handleToggleStatus = async (category: Category) => {
     const newStatus = !category.isActive;
-    
+
     // Optimistic update - change UI immediately
     setOptimisticUpdates(prev => ({ ...prev, [category.id]: newStatus }));
-    
+
     try {
       const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-      
+
       // Direct fetch call without FormData for simple status toggle
       const response = await fetch(`${API_URL}/api/categories/${category.id}`, {
         method: 'PUT',
@@ -105,17 +105,17 @@ export default function CategoriesTable() {
 
       // Success - keep the optimistic update permanently
       // Don't clear it, the change is now saved on the backend
-      
+
     } catch (error) {
       console.error('Error toggling category status:', error);
-      
+
       // Revert optimistic update on error only
       setOptimisticUpdates(prev => {
         const updated = { ...prev };
         delete updated[category.id];
         return updated;
       });
-      
+
       alert('Failed to update category status. Please try again.');
     }
   };
@@ -152,7 +152,7 @@ export default function CategoriesTable() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as 'all' | 'active' | 'inactive')}
-            className="px-3 sm:px-4 py-2 sm:py-2.5 font-[nunito] bg-slate-800/50 border border-slate-600/50 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 transition-all min-w-0"
+            className="cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 font-[nunito] bg-slate-800/50 border border-slate-600/50 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 transition-all min-w-0"
           >
             <option value="all">All Status</option>
             <option value="active">Active</option>
@@ -163,7 +163,7 @@ export default function CategoriesTable() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'name' | 'games' | 'date')}
-            className="px-3 sm:px-4 py-2 sm:py-2.5 font-[nunito] bg-slate-800/50 border border-slate-600/50 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 transition-all min-w-0"
+            className="cursor-pointer px-3 sm:px-4 py-2 sm:py-2.5 font-[nunito] bg-slate-800/50 border border-slate-600/50 rounded-lg text-white text-xs sm:text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/30 transition-all min-w-0"
           >
             <option value="name">Sort by Name</option>
             <option value="games">Sort by Games</option>
@@ -222,9 +222,8 @@ export default function CategoriesTable() {
                 {paginatedCategories.map((category, index: number) => (
                   <tr
                     key={category.id}
-                    className={`border-b border-slate-700/40 hover:bg-slate-800/40 transition-all duration-200 group ${
-                      index === paginatedCategories.length - 1 ? 'border-b-0' : ''
-                    }`}
+                    className={`border-b border-slate-700/40 hover:bg-slate-800/40 transition-all duration-200 group ${index === paginatedCategories.length - 1 ? 'border-b-0' : ''
+                      }`}
                   >
                     {/* Category Name */}
                     <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4">
@@ -266,14 +265,12 @@ export default function CategoriesTable() {
                     <td className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 text-center">
                       <div className="flex items-center justify-center gap-1.5 sm:gap-2">
                         <div
-                          className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${
-                            category.isActive ? 'bg-green-500 animate-pulse' : 'bg-slate-500'
-                          }`}
+                          className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${category.isActive ? 'bg-green-500 animate-pulse' : 'bg-slate-500'
+                            }`}
                         />
                         <span
-                          className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider font-[nunito] ${
-                            category.isActive ? 'text-green-400' : 'text-slate-400'
-                          }`}
+                          className={`text-[10px] sm:text-xs font-bold uppercase tracking-wider font-[nunito] ${category.isActive ? 'text-green-400' : 'text-slate-400'
+                            }`}
                         >
                           {category.isActive ? 'Active' : 'Inactive'}
                         </span>
@@ -285,32 +282,30 @@ export default function CategoriesTable() {
                       <div className="flex items-center justify-center gap-1 sm:gap-2">
                         <button
                           onClick={() => handleToggleStatus(category)}
-                          className={`relative inline-flex h-5 sm:h-6 w-9 sm:w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-offset-slate-900 shrink-0 ${
-                            category.isActive 
-                              ? 'bg-linear-to-r from-purple-600 to-pink-600 shadow-lg shadow-purple-600/30' 
-                              : 'bg-slate-700'
-                          }`}
+                          className={`cursor-pointer relative inline-flex h-5 sm:h-6 w-9 sm:w-11 items-center rounded-full transition-all duration-200 focus:outline-none focus:ring-offset-slate-900 shrink-0 ${category.isActive
+                            ? 'bg-linear-to-r from-purple-600 to-pink-600 shadow-lg shadow-purple-600/30'
+                            : 'bg-slate-700'
+                            }`}
                           title={category.isActive ? 'Click to deactivate' : 'Click to activate'}
                         >
                           <span
-                            className={`inline-block h-3.5 sm:h-4 w-3.5 sm:w-4 transform rounded-full bg-white shadow-md transition-transform duration-200 ${
-                              category.isActive ? 'translate-x-5 sm:translate-x-6' : 'translate-x-1'
-                            }`}
+                            className={`cursor-pointer inline-block h-3.5 sm:h-4 w-3.5 sm:w-4 transform rounded-full bg-white shadow-md transition-transform duration-200 ${category.isActive ? 'translate-x-5 sm:translate-x-6' : 'translate-x-1'
+                              }`}
                           />
                         </button>
                         <button
                           onClick={() => handleEditClick(category)}
-                          className="p-1.5 sm:p-2 hover:bg-yellow-500/20 rounded-lg transition-all duration-200 hover:scale-110 group/btn shrink-0"
+                          className="cursor-pointer p-1.5 sm:p-2 hover:bg-yellow-500/20 rounded-lg transition-all duration-200 hover:scale-110 group/btn shrink-0"
                           title="Edit"
                         >
-                          <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-400 group-hover/btn:text-yellow-300" />
+                          <Edit2 className="cursor-pointer w-3.5 h-3.5 sm:w-4 sm:h-4 text-yellow-400 group-hover/btn:text-yellow-300" />
                         </button>
                         <button
                           onClick={() => handleDeleteClick(category)}
-                          className="p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg transition-all duration-200 hover:scale-110 group/btn shrink-0"
+                          className="cursor-pointer p-1.5 sm:p-2 hover:bg-red-500/20 rounded-lg transition-all duration-200 hover:scale-110 group/btn shrink-0"
                           title="Delete"
                         >
-                          <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400 group-hover/btn:text-red-300" />
+                          <Trash2 className="cursor-pointer w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400 group-hover/btn:text-red-300" />
                         </button>
                       </div>
                     </td>
@@ -330,14 +325,14 @@ export default function CategoriesTable() {
             </div>
 
             <div className="flex items-center gap-2 order-1 sm:order-2">
-              <button 
+              <button
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
                 className="p-1.5 sm:p-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               </button>
-              
+
               <div className="flex items-center gap-1 mx-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   let pageNum;
@@ -350,16 +345,15 @@ export default function CategoriesTable() {
                   } else {
                     pageNum = currentPage - 2 + i;
                   }
-                  
+
                   return (
                     <button
                       key={pageNum}
                       onClick={() => setCurrentPage(pageNum)}
-                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center font-bold transition-all font-[nunito] ${
-                        currentPage === pageNum 
-                          ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20' 
-                          : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
-                      }`}
+                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center font-bold transition-all font-[nunito] ${currentPage === pageNum
+                        ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20'
+                        : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                        }`}
                     >
                       {pageNum}
                     </button>
@@ -367,7 +361,7 @@ export default function CategoriesTable() {
                 })}
               </div>
 
-              <button 
+              <button
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages || totalPages === 0}
                 className="p-1.5 sm:p-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"

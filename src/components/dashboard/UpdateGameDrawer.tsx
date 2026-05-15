@@ -584,7 +584,7 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
           <button
             onClick={onClose}
             disabled={updateMutation.isPending}
-            className="flex-1 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold disabled:opacity-50"
+            className="flex-1 px-4 py-2.5 bg-slate-700 cursor-pointer hover:bg-slate-600 text-white rounded-lg font-semibold disabled:opacity-50"
           >
             Cancel
           </button>
@@ -592,7 +592,7 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
             type="submit"
             onClick={(e) => handleSubmit(e as any)}
             disabled={updateMutation.isPending}
-            className="flex-1 px-4 py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold flex items-center justify-center gap-2 disabled:opacity-50"
+            className="flex-1 px-4 py-2.5 cursor-pointer bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {updateMutation.isPending ? (
               <>

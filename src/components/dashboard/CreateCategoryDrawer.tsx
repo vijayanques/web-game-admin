@@ -84,7 +84,7 @@ export default function CreateCategoryDrawer({ isOpen, onClose }: CreateCategory
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    
+
     if (name === 'name') {
       // Auto-generate slug from name
       const generatedSlug = value
@@ -93,7 +93,7 @@ export default function CreateCategoryDrawer({ isOpen, onClose }: CreateCategory
         .replace(/[^\w\s-]/g, '')
         .replace(/\s+/g, '-')
         .replace(/-+/g, '-');
-      
+
       setFormData(prev => ({
         ...prev,
         name: value,
@@ -145,9 +145,8 @@ export default function CreateCategoryDrawer({ isOpen, onClose }: CreateCategory
 
       {/* Drawer */}
       <div
-        className={`fixed right-0 top-0 h-full w-full max-w-sm sm:max-w-md bg-slate-900 border-l border-slate-700 shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed right-0 top-0 h-full w-full max-w-sm sm:max-w-md bg-slate-900 border-l border-slate-700 shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-700 bg-linear-to-r from-purple-600/10 to-pink-600/10 sticky top-0 z-10">
@@ -228,14 +227,13 @@ export default function CreateCategoryDrawer({ isOpen, onClose }: CreateCategory
                       icon: name,
                     }));
                   }}
-                  className={`p-2 sm:p-3 rounded-lg border-2 transition-all hover:scale-105 ${
-                    formData.icon === name
-                      ? 'border-purple-500 bg-purple-500/30 shadow-lg shadow-purple-500/20'
-                      : 'border-slate-600 bg-slate-800/50 hover:border-slate-500 hover:bg-slate-700/50'
-                  }`}
+                  className={`cursor-pointer p-2 sm:p-3 rounded-lg border-2 transition-all hover:scale-105 ${formData.icon === name
+                    ? 'border-purple-500 bg-purple-500/30 shadow-lg shadow-purple-500/20'
+                    : 'border-slate-600 bg-slate-800/50 hover:border-slate-500 hover:bg-slate-700/50'
+                    }`}
                   title={name}
                 >
-                  <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 text-white mx-auto" />
+                  <IconComponent className=" cursor-pointer w-5 h-5 sm:w-6 sm:h-6 text-white mx-auto" />
                 </button>
               ))}
             </div>
@@ -273,11 +271,10 @@ export default function CreateCategoryDrawer({ isOpen, onClose }: CreateCategory
             type="submit"
             onClick={handleSubmit}
             disabled={!isFormValid || isSubmitting}
-            className={`cursor-pointer flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white font-semibold text-xs sm:text-sm rounded-lg transition-all duration-200 font-[nunito] ${
-              isFormValid && !isSubmitting
-                ? 'hover:shadow-lg hover:shadow-purple-600/50 cursor-pointer'
-                : 'opacity-50 cursor-not-allowed'
-            }`}
+            className={`cursor-pointer flex-1 px-3 sm:px-4 py-2 sm:py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white font-semibold text-xs sm:text-sm rounded-lg transition-all duration-200 font-[nunito] ${isFormValid && !isSubmitting
+              ? 'hover:shadow-lg hover:shadow-purple-600/50 cursor-pointer'
+              : 'opacity-50 cursor-not-allowed'
+              }`}
           >
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-1.5 sm:gap-2">

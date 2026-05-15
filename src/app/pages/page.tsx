@@ -25,9 +25,8 @@ export default function PagesPage() {
           )}
 
           <div
-            className={`fixed lg:static inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out mt-16 lg:mt-0 ${
-              sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
-            }`}
+            className={`fixed lg:static inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out mt-16 lg:mt-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+              }`}
           >
             <Sidebar
               currentPage="pages"
@@ -40,9 +39,9 @@ export default function PagesPage() {
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
                 className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
-              > 
+              >
                 {sidebarOpen ? (
-                  <X className="w-6 h-6 text-white" />  
+                  <X className="w-6 h-6 text-white" />
                 ) : (
                   <Menu className="w-6 h-6 text-white" />
                 )}
@@ -59,7 +58,7 @@ export default function PagesPage() {
                 </div>
                 <button
                   onClick={() => setCreateDrawerOpen(true)}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-600/30 transition-all"
+                  className="cursor-pointer flex items-center gap-2 px-4 py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-600/30 transition-all"
                 >
                   <Plus className="w-5 h-5" />
                   Add Page

@@ -124,7 +124,7 @@ export default function AdsManagementPage() {
               {!isEditing && (
                 <button
                   onClick={() => setIsEditing(true)}
-                  className="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-medium shadow-lg shadow-purple-600/20"
+                  className="cursor-pointer flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-medium shadow-lg shadow-purple-600/20"
                 >
                   <Plus className="w-5 h-5" />
                   Add Placement
@@ -141,7 +141,7 @@ export default function AdsManagementPage() {
                     {currentAd.id ? 'Edit Placement' : 'New Ad Placement'}
                   </h2>
                   <button onClick={() => { setIsEditing(false); resetForm(); }} className="p-2 hover:bg-slate-800 rounded-full text-slate-400">
-                    <X className="w-6 h-6" />
+                    <X className="cursor-pointer w-6 h-6" />
                   </button>
                 </div>
 
@@ -152,7 +152,7 @@ export default function AdsManagementPage() {
                       <select
                         value={currentAd.slot}
                         onChange={(e) => setCurrentAd({ ...currentAd, slot: e.target.value })}
-                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-purple-500 outline-none transition-all"
+                        className="cursor-pointer w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-purple-500 outline-none transition-all"
                       >
                         {adPlacements.map(p => (
                           <option key={p.value} value={p.value}>{p.label}</option>
@@ -166,7 +166,7 @@ export default function AdsManagementPage() {
                       <select
                         value={currentAd.adType}
                         onChange={(e) => setCurrentAd({ ...currentAd, adType: e.target.value })}
-                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-purple-500 outline-none transition-all"
+                        className="cursor-pointer w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-purple-500 outline-none transition-all"
                       >
                         <option value="static">Static Image Card</option>
                         <option value="promotional">Promotional Card</option>
@@ -301,14 +301,14 @@ export default function AdsManagementPage() {
                     <button
                       type="button"
                       onClick={() => { setIsEditing(false); resetForm(); }}
-                      className="px-6 py-2 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 transition-colors"
+                      className="cursor-pointer px-6 py-2 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={upsertMutation.isPending}
-                      className="px-8 py-2 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-bold hover:opacity-90 transition-all shadow-lg shadow-purple-600/20 disabled:opacity-50"
+                      className="cursor-pointer px-8 py-2 bg-linear-to-r from-purple-600 to-pink-600 text-white rounded-lg font-bold hover:opacity-90 transition-all shadow-lg shadow-purple-600/20 disabled:opacity-50"
                     >
                       {upsertMutation.isPending ? 'Saving...' : 'Save Configuration'}
                     </button>
@@ -364,15 +364,15 @@ export default function AdsManagementPage() {
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => handleEdit(ad)}
-                            className="p-2 hover:bg-blue-500/10 text-blue-400 rounded-lg transition-colors"
+                            className="cursor-pointer p-2 hover:bg-blue-500/10 text-blue-400 rounded-lg transition-colors"
                           >
-                            <Edit2 className="w-4 h-4" />
+                            <Edit2 className="cursor-pointer w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(ad.id!, ad.slot)}
-                            className="p-2 hover:bg-rose-500/10 text-rose-400 rounded-lg transition-colors"
+                            className="cursor-pointer p-2 hover:bg-rose-500/10 text-rose-400 rounded-lg transition-colors"
                           >
-                            <Trash2 className="w-4 h-4" />
+                            <Trash2 className="cursor-pointer w-4 h-4" />
                           </button>
                         </div>
                       </div>
@@ -394,7 +394,7 @@ export default function AdsManagementPage() {
                   <p className="text-slate-400">No ad placements configured yet.</p>
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="mt-4 text-purple-500 hover:text-purple-400 font-bold"
+                    className="cursor-pointer mt-4 text-purple-500 hover:text-purple-400 font-bold"
                   >
                     Create your first placement
                   </button>

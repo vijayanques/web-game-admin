@@ -62,7 +62,7 @@ export default function UpdateCategoryDrawer({ isOpen, onClose, category }: Upda
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    
+
     if (name === 'name') {
       // Auto-generate slug from name
       const generatedSlug = value
@@ -71,7 +71,7 @@ export default function UpdateCategoryDrawer({ isOpen, onClose, category }: Upda
         .replace(/[^\w\s-]/g, '')
         .replace(/\s+/g, '-')
         .replace(/-+/g, '-');
-      
+
       setFormData(prev => ({
         ...prev,
         name: value,
@@ -150,9 +150,8 @@ export default function UpdateCategoryDrawer({ isOpen, onClose, category }: Upda
 
       {/* Drawer */}
       <div
-        className={`fixed right-0 top-0 h-full w-full sm:w-96 bg-slate-900 border-l border-slate-700 shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed right-0 top-0 h-full w-full sm:w-96 bg-slate-900 border-l border-slate-700 shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-slate-700 bg-linear-to-r from-purple-600/10 to-pink-600/10">
@@ -179,7 +178,7 @@ export default function UpdateCategoryDrawer({ isOpen, onClose, category }: Upda
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="e.g., Action, RPG, Puzzle"
-                className="w-full px-4 py-2.5 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-slate-500 text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
+                className="cursor-pointer w-full px-4 py-2.5 bg-slate-800/50 border border-slate-600 rounded-lg text-white placeholder-slate-500 text-sm focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all"
                 required
               />
             </div>
@@ -228,19 +227,18 @@ export default function UpdateCategoryDrawer({ isOpen, onClose, category }: Upda
                     key={name}
                     type="button"
                     onClick={() => setFormData(prev => ({ ...prev, icon: name }))}
-                    className={`p-3 rounded-lg border-2 transition-all flex items-center justify-center ${
-                      formData.icon === name
-                        ? 'border-purple-500 bg-purple-500/20'
-                        : 'border-slate-600 bg-slate-800/50 hover:border-slate-500'
-                    }`}
+                    className={`cursor-pointer p-3 rounded-lg border-2 transition-all flex items-center justify-center ${formData.icon === name
+                      ? 'border-purple-500 bg-purple-500/20'
+                      : 'border-slate-600 bg-slate-800/50 hover:border-slate-500'
+                      }`}
                     title={name}
                   >
-                    <IconComponent className="w-5 h-5 text-white" />
+                    <IconComponent className="cursor-pointer w-5 h-5 text-white" />
                   </button>
                 ))}
               </div>
               {formData.icon && (
-                <p className="text-xs text-slate-400 mt-2">Selected: {formData.icon}</p>
+                <p className="cursor-pointer text-xs text-slate-400 mt-2">Selected: {formData.icon}</p>
               )}
             </div>
 
@@ -280,22 +278,21 @@ export default function UpdateCategoryDrawer({ isOpen, onClose, category }: Upda
                 type="button"
                 onClick={onClose}
                 disabled={isSubmitting}
-                className="flex-1 px-4 py-2.5 bg-slate-800 text-white font-semibold text-sm rounded-lg border border-slate-600 hover:bg-slate-700 transition-all duration-200 disabled:opacity-50"
+                className="cursor-pointer flex-1 px-4 py-2.5 bg-slate-800 text-white font-semibold text-sm rounded-lg border border-slate-600 hover:bg-slate-700 transition-all duration-200 disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={!isFormValid || isSubmitting}
-                className={`flex-1 px-4 py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white font-semibold text-sm rounded-lg transition-all duration-200 ${
-                  isFormValid && !isSubmitting
-                    ? 'hover:shadow-lg hover:shadow-purple-600/50 cursor-pointer'
-                    : 'opacity-50 cursor-not-allowed'
-                }`}
+                className={`flex-1 px-4 py-2.5 bg-linear-to-r from-purple-600 to-pink-600 text-white font-semibold text-sm rounded-lg transition-all duration-200 ${isFormValid && !isSubmitting
+                  ? 'hover:shadow-lg hover:shadow-purple-600/50 cursor-pointer'
+                  : 'opacity-50 cursor-not-allowed'
+                  }`}
               >
                 {isSubmitting ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span className="cursor-pointer flex items-center justify-center gap-2">
+                    <div className="cursor-pointer w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     Updating...
                   </span>
                 ) : (
