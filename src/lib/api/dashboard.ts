@@ -46,7 +46,7 @@ export interface DashboardData {
 export async function fetchDashboardData(): Promise<DashboardData> {
   try {
     console.log('🔄 Fetching dashboard data from:', `${API_URL}/api/admin/dashboard/stats`);
-    
+
     // Call backend directly
     const response = await axios.get(`${API_URL}/api/admin/dashboard/stats`, {
       timeout: 10000, // 10 second timeout
@@ -54,14 +54,14 @@ export async function fetchDashboardData(): Promise<DashboardData> {
         'Content-Type': 'application/json',
       },
     });
-    
+
     console.log('✅ Dashboard data received:', response.data);
-    
+
     // Backend returns data directly, not wrapped in success/data
     return response.data;
   } catch (error) {
     console.error('❌ Error fetching dashboard data:', error);
-    
+
     if (axios.isAxiosError(error)) {
       console.error('API Error Details:', {
         message: error.message,
@@ -71,7 +71,7 @@ export async function fetchDashboardData(): Promise<DashboardData> {
         url: error.config?.url,
       });
     }
-    
+
     throw error;
   }
 }

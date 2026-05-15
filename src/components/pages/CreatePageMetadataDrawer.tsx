@@ -2,7 +2,7 @@
 
 import { X } from 'lucide-react';
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import SeoMetadataForm from '@/components/SeoMetadataForm';
 
@@ -19,18 +19,6 @@ const API_BASE_URL = (() => {
 })();
 
 
-// Predefined pages
-const PREDEFINED_PAGES = [
-  { name: 'Home / Landing Page', slug: '/' },
-  { name: 'Privacy Policy', slug: '/privacy-policy' },
-  { name: 'Terms of Service', slug: '/terms-of-service' },
-  { name: 'About Us', slug: '/about' },
-  { name: 'Contact Us', slug: '/contact' },
-  { name: 'Login', slug: '/login' },
-  { name: 'Sign Up', slug: '/signup' },
-  { name: 'Profile', slug: '/profile' },
-  { name: 'Reset Password', slug: '/reset-password' },
-];
 
 export default function CreatePageMetadataDrawer({ isOpen, onClose }: CreatePageMetadataDrawerProps) {
   const queryClient = useQueryClient();
@@ -38,11 +26,34 @@ export default function CreatePageMetadataDrawer({ isOpen, onClose }: CreatePage
   const [customName, setCustomName] = useState('');
   const [customSlug, setCustomSlug] = useState('');
   const [createdPageId, setCreatedPageId] = useState<number | null>(null);
+  
+  // Fetch available pages
+  const { data: availablePages = [] } = useQuery({
+    queryKey: ['availablePages'],
+    queryFn: async () => {
+      const response = await fetch(`${API_BASE_URL}/seo/pages/available`);
+      if (!response.ok) return [];
+      return response.json() as Promise<Array<{ name: string; slug: string }>>;
+    }
+  });
+
+  // Combined pages (predefined + dynamic)
+  const allPages = availablePages.length > 0 ? availablePages : [
+    { name: 'Home / Landing Page', slug: '/' },
+    { name: 'Privacy Policy', slug: '/privacy-policy' },
+    { name: 'Terms of Service', slug: '/terms-of-service' },
+    { name: 'About Us', slug: '/about-us' },
+    { name: 'Contact Us', slug: '/contact' },
+    { name: 'Login', slug: '/login' },
+    { name: 'Sign Up', slug: '/signup' },
+    { name: 'Profile', slug: '/profile' },
+    { name: 'Reset Password', slug: '/reset-password' },
+  ];
 
   // Create page mutation
   const createMutation = useMutation({
     mutationFn: async () => {
-      const page = PREDEFINED_PAGES.find(p => p.slug === selectedPage);
+      const page = allPages.find(p => p.slug === selectedPage);
       const pageName = selectedPage === 'custom' ? customName : page?.name || '';
       const pageSlug = selectedPage === 'custom' ? customSlug : selectedPage;
 
@@ -101,7 +112,7 @@ export default function CreatePageMetadataDrawer({ isOpen, onClose }: CreatePage
 
   if (!isOpen) return null;
 
-  const page = PREDEFINED_PAGES.find(p => p.slug === selectedPage);
+  const page = allPages.find(p => p.slug === selectedPage);
   const pageName = selectedPage === 'custom' ? customName : page?.name || '';
   const pageSlug = selectedPage === 'custom' ? customSlug : selectedPage;
 
@@ -130,7 +141,7 @@ export default function CreatePageMetadataDrawer({ isOpen, onClose }: CreatePage
                   className="cursor-pointer w-full px-4 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
                 >
                   <option value="">Choose a page...</option>
-                  {PREDEFINED_PAGES.map((page) => (
+                  {allPages.map((page) => (
                     <option key={page.slug} value={page.slug}>
                       {page.name}
                     </option>

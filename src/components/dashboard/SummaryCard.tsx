@@ -187,7 +187,7 @@ export default function SummaryCard({
         </div>
 
         {/* Trend badge */}
-        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+        {/* <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
           <div className={`flex items-center font-[nunito] gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-xs font-bold border ${trendUp
             ? 'bg-green-500/10 border-green-500/30 text-green-400'
             : 'bg-red-500/10 border-red-500/30 text-red-400'
@@ -196,7 +196,7 @@ export default function SummaryCard({
             <span className="truncate">{trend}</span>
           </div>
           <span className="text-slate-500 text-[10px] sm:text-xs font-[nunito] font-semibold whitespace-nowrap">vs last month</span>
-        </div>
+        </div> */}
       </div>
     </div>
   );
