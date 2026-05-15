@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Search, Edit2, Trash2, Loader, ChevronDown, Gamepad2, Sword, Shield, Car, Rocket, Target, Crosshair, Puzzle, Dices, Flame, Zap, Crown, Trophy, Star, Sparkles, Heart, Ghost, Skull, Bomb, Wand2, Users, Brain, Lightbulb, Smile, Wind, Waves, Mountain, Flower, Gem, Compass, Map, Castle, Tent, Cloud, Sun, Moon, Droplet, Leaf, Trees, Bird, Fish, Anchor, Activity, Cpu, Database, Server, Wifi, Radio, Tv, Monitor, Smartphone, Camera, Video, Film, Music, Palette, Book, Tag } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, Edit2, Trash2, Loader, ChevronDown, ChevronLeft, ChevronRight, Gamepad2, Sword, Shield, Car, Rocket, Target, Crosshair, Puzzle, Dices, Flame, Zap, Crown, Trophy, Star, Sparkles, Heart, Ghost, Skull, Bomb, Wand2, Users, Brain, Lightbulb, Smile, Wind, Waves, Mountain, Flower, Gem, Compass, Map, Castle, Tent, Cloud, Sun, Moon, Droplet, Leaf, Trees, Bird, Fish, Anchor, Activity, Cpu, Database, Server, Wifi, Radio, Tv, Monitor, Smartphone, Camera, Video, Film, Music, Palette, Book, Tag } from 'lucide-react';
 import UpdateCategoryDrawer from './UpdateCategoryDrawer';
 import DeleteCategoryModal from './DeleteCategoryModal';
 import { useCategories } from '@/lib/hooks/useCategories';
@@ -24,7 +24,16 @@ export default function CategoriesTable() {
   const [togglingId, setTogglingId] = useState<number | null>(null);
   const [optimisticUpdates, setOptimisticUpdates] = useState<Record<number, boolean>>({});
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
   const { data: categories = [], isLoading, isError, error, refetch } = useCategories();
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter, sortBy]);
 
   // Get icon component dynamically
   const getIconComponent = (iconName: string | undefined) => {
@@ -51,6 +60,12 @@ export default function CategoriesTable() {
       if (sortBy === 'date') return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       return 0;
     });
+
+  // Pagination logic
+  const totalItems = filteredCategories.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedCategories = filteredCategories.slice(startIndex, startIndex + itemsPerPage);
 
   const handleEditClick = (category: Category) => {
     setSelectedCategory(category);
@@ -204,11 +219,11 @@ export default function CategoriesTable() {
                 </tr>
               </thead>
               <tbody>
-                {filteredCategories.map((category, index) => (
+                {paginatedCategories.map((category, index: number) => (
                   <tr
                     key={category.id}
                     className={`border-b border-slate-700/40 hover:bg-slate-800/40 transition-all duration-200 group ${
-                      index === filteredCategories.length - 1 ? 'border-b-0' : ''
+                      index === paginatedCategories.length - 1 ? 'border-b-0' : ''
                     }`}
                   >
                     {/* Category Name */}
@@ -306,13 +321,60 @@ export default function CategoriesTable() {
           </div>
         )}
 
-        {/* Table Footer */}
+        {/* Pagination Footer */}
         {!isLoading && filteredCategories.length > 0 && (
-          <div className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 bg-linear-to-r from-slate-800/40 to-slate-800/20 border-t border-slate-700/60 flex items-center justify-between text-[10px] sm:text-xs text-slate-400">
-            <span className="font-[nunito]">
-              Showing <span className="text-purple-400 font-bold">{filteredCategories.length}</span> of{' '}
-              <span className="text-purple-400 font-bold">{categories.length}</span> categories
-            </span>
+          <div className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 bg-linear-to-r from-slate-800/40 to-slate-800/20 border-t border-slate-700/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] sm:text-xs text-slate-400">
+            <div className="font-[nunito] order-2 sm:order-1">
+              Showing <span className="text-purple-400 font-bold">{Math.min(startIndex + 1, totalItems)}</span> to <span className="text-purple-400 font-bold">{Math.min(startIndex + itemsPerPage, totalItems)}</span> of{' '}
+              <span className="text-purple-400 font-bold">{totalItems}</span> categories
+            </div>
+
+            <div className="flex items-center gap-2 order-1 sm:order-2">
+              <button 
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="p-1.5 sm:p-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              </button>
+              
+              <div className="flex items-center gap-1 mx-1">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum;
+                  if (totalPages <= 5) {
+                    pageNum = i + 1;
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1;
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i;
+                  } else {
+                    pageNum = currentPage - 2 + i;
+                  }
+                  
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center font-bold transition-all font-[nunito] ${
+                        currentPage === pageNum 
+                          ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/20' 
+                          : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button 
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages || totalPages === 0}
+                className="p-1.5 sm:p-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              </button>
+            </div>
           </div>
         )}
       </div>
