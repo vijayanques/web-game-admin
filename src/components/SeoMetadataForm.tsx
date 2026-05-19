@@ -28,6 +28,7 @@ interface SeoMetadata {
   twitterDescription: string;
   twitterImage: string;
   robots: string;
+  favicon?: string;
 }
 
 const API_BASE_URL = (() => {
@@ -66,6 +67,7 @@ export default function SeoMetadataForm({
     twitterDescription: '',
     twitterImage: '',
     robots: 'index, follow',
+    favicon: '',
   });
 
   // Image upload states
@@ -73,6 +75,8 @@ export default function SeoMetadataForm({
   const [twitterImageFile, setTwitterImageFile] = useState<File | null>(null);
   const [ogImageUploading, setOgImageUploading] = useState(false);
   const [twitterImageUploading, setTwitterImageUploading] = useState(false);
+  const [faviconUploading, setFaviconUploading] = useState(false);
+  const [faviconFile, setFaviconFile] = useState<File | null>(null);
 
   // Fetch existing SEO metadata
   const { data: existingData, isLoading } = useQuery({
@@ -116,6 +120,7 @@ export default function SeoMetadataForm({
         twitterDescription: existingData.twitterDescription || '',
         twitterImage: existingData.twitterImage || '',
         robots: existingData.robots || 'index, follow',
+        favicon: existingData.favicon || '',
       });
     } else if (pageUrl) {
       // If no existing data, set canonical URL to page URL
@@ -247,6 +252,34 @@ export default function SeoMetadataForm({
       setTwitterImageUploading(false);
     }
   };
+  
+  // Handle Favicon upload
+  const handleFaviconUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setFaviconFile(file);
+    setFaviconUploading(true);
+
+    try {
+      const result = await uploadToCloudinary(file, `theplayfree/seo/favicon`);
+      if (result.success && result.url) {
+        setFormData((prev) => ({
+          ...prev,
+          favicon: result.url || '',
+        }));
+        toast.success('Favicon uploaded successfully');
+      } else {
+        toast.error(result.error || 'Failed to upload favicon');
+        setFaviconFile(null);
+      }
+    } catch (error) {
+      toast.error('Upload failed');
+      setFaviconFile(null);
+    } finally {
+      setFaviconUploading(false);
+    }
+  };
 
   // Clear OG image
   const clearOgImage = () => {
@@ -266,6 +299,15 @@ export default function SeoMetadataForm({
       return updated;
     });
     setTwitterImageFile(null);
+  };
+
+  // Clear Favicon
+  const clearFavicon = () => {
+    setFormData((prev) => ({
+      ...prev,
+      favicon: '',
+    }));
+    setFaviconFile(null);
   };
 
   const handleSubmit = () => {
@@ -623,6 +665,64 @@ export default function SeoMetadataForm({
             <option value="noindex, nofollow">No Index, No Follow</option>
           </select>
         </div>
+
+        {/* Favicon Section - Only for Home Page */}
+        {(entitySlug === '/' || entitySlug === '' || entityTitle.toLowerCase().includes('home')) && (
+          <div className="border-t border-slate-700 pt-4 mt-4">
+            <h4 className="text-sm font-semibold text-slate-200 mb-3">
+              Browser Favicon
+            </h4>
+            <div className="space-y-3">
+              <label className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-800 border-2 border-dashed border-slate-600 rounded text-slate-300 cursor-pointer hover:border-blue-500 hover:bg-slate-700/50 transition-all">
+                {faviconUploading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span className="text-sm font-medium">Uploading...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4" />
+                    <span className="text-sm font-medium">
+                      {faviconFile ? faviconFile.name : 'Upload Favicon (ICO/PNG)'}
+                    </span>
+                  </>
+                )}
+                <input
+                  type="file"
+                  accept="image/x-icon,image/png,image/svg+xml"
+                  onChange={handleFaviconUpload}
+                  disabled={faviconUploading}
+                  className="hidden"
+                />
+              </label>
+
+              {formData.favicon && (
+                <div className="flex items-center gap-4 p-3 bg-slate-800 rounded border border-slate-600">
+                  <div className="w-10 h-10 bg-white p-1 rounded flex items-center justify-center">
+                    <img
+                      src={formData.favicon}
+                      alt="Favicon"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-slate-400 truncate">{formData.favicon}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={clearFavicon}
+                    className="p-1.5 bg-red-500 hover:bg-red-600 rounded transition-colors"
+                  >
+                    <X className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              )}
+              <p className="text-xs text-slate-500">
+                Recommended: 32x32px or 16x16px. Format: .ico or .png
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       <button
