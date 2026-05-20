@@ -45,7 +45,7 @@ export default function DashboardPage() {
                   <Menu className="w-6 h-6 text-white" />
                 )}
               </button>
-              <h1 className="text-lg font-bold text-white">GameAdmin</h1>
+              <h1 className="text-lg font-bold text-white">Dashboard</h1>
               <div className="w-10" />
             </div>
 

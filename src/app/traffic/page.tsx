@@ -7,13 +7,14 @@ import TrafficChart from '@/components/charts/TrafficChart';
 import {
   Activity, Users, UserCheck, PlayCircle, CheckCircle2,
   Smartphone, Monitor, Laptop, Chrome, Compass,
-  Globe, Clock, Search, Filter
+  Globe, Clock, Search, Filter, Menu, X
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export default function TrafficPage() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'daily' | 'weekly' | 'monthly'>('weekly');
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,15 +69,41 @@ export default function TrafficPage() {
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
-      <div className="w-64 hidden lg:block h-full shrink-0">
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <div
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out mt-16 lg:mt-0 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}
+      >
         <Sidebar currentPage="traffic" />
       </div>
 
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         <Navbar />
 
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#0B0F19] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),rgba(255,255,255,0))]">
-          <div className="max-w-7xl mx-auto space-y-8">
+        <main className="flex-1 overflow-y-auto bg-[#0B0F19] bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.15),rgba(255,255,255,0))]">
+          <div className="lg:hidden bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
+            >
+              {sidebarOpen ? (
+                <X className="w-6 h-6 text-white" />
+              ) : (
+                <Menu className="w-6 h-6 text-white" />
+              )}
+            </button>
+            <h1 className="text-lg font-bold text-white">Traffic Analytics</h1>
+            <div className="w-10" />
+          </div>
+
+          <div className="max-w-7xl mx-auto space-y-8 p-4 sm:p-6 lg:p-8">
 
             {/* Header */}
             <div>

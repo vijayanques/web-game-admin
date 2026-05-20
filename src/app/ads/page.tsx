@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2, Edit2, Check, X, Megaphone, Info, Link as LinkIcon, Image as ImageIcon } from 'lucide-react';
+import { Plus, Trash2, Edit2, Check, X, Megaphone, Info, Link as LinkIcon, Image as ImageIcon, Menu } from 'lucide-react';
 import Sidebar from '@/components/layout/Sidebar';
 import Navbar from '@/components/layout/Navbar';
 import { getAllAdConfigs, upsertAdConfig, deleteAdConfig, AdConfig } from '@/lib/api/adsense';
@@ -11,6 +11,7 @@ import DeleteConfirmModal from '@/components/common/DeleteConfirmModal';
 
 export default function AdsManagementPage() {
   const queryClient = useQueryClient();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, id: '', slot: '' });
   const [currentAd, setCurrentAd] = useState<Partial<AdConfig>>({
@@ -105,15 +106,41 @@ export default function AdsManagementPage() {
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
-      <div className="w-64 hidden lg:block h-full">
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <div
+        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out mt-16 lg:mt-0 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
+        }`}
+      >
         <Sidebar currentPage="ads" />
       </div>
 
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         <Navbar />
 
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-          <div className="max-w-6xl mx-auto space-y-8">
+        <main className="flex-1 overflow-y-auto">
+          <div className="lg:hidden bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 hover:bg-slate-800 rounded-lg transition-colors"
+            >
+              {sidebarOpen ? (
+                <X className="w-6 h-6 text-white" />
+              ) : (
+                <Menu className="w-6 h-6 text-white" />
+              )}
+            </button>
+            <h1 className="text-lg font-bold text-white">Ads Management</h1>
+            <div className="w-10" />
+          </div>
+
+          <div className="max-w-6xl mx-auto space-y-8 p-4 sm:p-6 lg:p-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-white flex items-center gap-3">
