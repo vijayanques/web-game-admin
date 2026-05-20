@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
-import { Upload, Trash2, Edit2, Check, X } from 'lucide-react';
+import { Upload, Trash2, Edit2, Check, X, Sparkles } from 'lucide-react';
 import { logoAPI, type Logo } from '@/lib/api/logos';
 import { uploadToCloudinary } from '@/lib/cloudinary-upload';
 
@@ -131,16 +131,23 @@ export default function LogosManager() {
   };
 
   if (isLoading) {
-    return <div className="text-center py-8">Loading logos...</div>;
+    return (
+      <div className="flex items-center justify-center py-16">
+        <div className="text-center">
+          <div className="relative w-12 h-12 mx-auto mb-4">
+            <div className="absolute inset-0 bg-linear-to-r from-purple-600 to-pink-600 rounded-full blur-md opacity-50 animate-pulse" />
+            <div className="relative w-full h-full border-2 border-transparent border-t-purple-600 border-r-pink-600 rounded-full animate-spin" />
+          </div>
+          <p className="text-slate-400 text-sm font-[nunito]">Loading logos...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Logo Management</h2>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="space-y-3">
+      {/* Logo Cards Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
         {['header', 'footer'].map((type) => {
           const logo = logos.find(l => l.type === type);
           const isEditing = editingId === logo?.id;
@@ -149,158 +156,193 @@ export default function LogosManager() {
           return (
             <div
               key={type}
-              className="bg-white rounded-lg shadow-md p-6 border border-gray-200"
+              className="group relative bg-slate-800/50 backdrop-blur-sm border border-slate-700/50 hover:border-purple-500/50 rounded-2xl overflow-hidden transition-all duration-300 hover:bg-slate-800/80 shadow-lg hover:shadow-purple-600/10"
             >
-              <h3 className="text-lg font-semibold mb-4 capitalize">
-                {type} Logo
-              </h3>
+              {/* Gradient Background */}
+              <div className="absolute inset-0 bg-linear-to-br from-purple-600/5 to-pink-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-              {/* Logo Preview */}
-              <div className="mb-4 p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center" style={{ minHeight: '150px' }}>
-                {logo?.url ? (
-                  <img
-                    src={logo.url}
-                    alt={logo.alt_text || `${type} logo`}
-                    className="max-w-full object-contain"
-                    style={{ maxHeight: '150px' }}
-                  />
-                ) : (
-                  <div className="text-center text-gray-400">
-                    <Upload className="w-8 h-8 mx-auto mb-2" />
-                    <p>No logo uploaded</p>
+              {/* Card Header */}
+              <div className="relative bg-linear-to-r from-slate-800/80 to-slate-700/40 px-3 py-2 border-b border-slate-700/50 backdrop-blur-sm">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-3 h-3 rounded-full ${type === 'header' ? 'bg-blue-500' : 'bg-purple-500'} animate-pulse`} />
+                    <h3 className="text-base font-bold text-white capitalize font-[nunito] tracking-tight">
+                      {type} Logo
+                    </h3>
                   </div>
-                )}
+                  {logo?.is_active && (
+                    <span className="px-3   py-1 bg-green-500/20 border border-green-500/50 rounded-full text-xs text-green-400 font-semibold font-[nunito]">
+                      Active
+                    </span>
+                  )}
+                </div>
               </div>
 
-              {/* Upload Button */}
-              <label className="block mb-4">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleFileUpload(e, typeKey)}
-                  disabled={uploadingType === typeKey}
-                  className="hidden"
-                />
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    const input = e.currentTarget.parentElement?.querySelector('input');
-                    input?.click();
-                  }}
-                  disabled={uploadingType === typeKey}
-                  className="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-400 flex items-center justify-center gap-2"
-                >
-                  <Upload className="w-4 h-4" />
-                  {uploadingType === typeKey ? 'Uploading...' : 'Upload Logo'}
-                </button>
-              </label>
-
-              {/* Form Fields */}
-              {isEditing && logo ? (
-                <div className="space-y-3 mb-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Alt Text
-                    </label>
-                    <input
-                      type="text"
-                      value={formData[typeKey].alt_text}
-                      onChange={(e) =>
-                        handleInputChange(typeKey, 'alt_text', e.target.value)
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Logo alt text"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Link URL
-                    </label>
-                    <input
-                      type="text"
-                      value={formData[typeKey].link_url}
-                      onChange={(e) =>
-                        handleInputChange(typeKey, 'link_url', e.target.value)
-                      }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="https://example.com"
-                    />
-                  </div>
+              {/* Card Content */}
+              <div className="relative p-3 space-y-3">
+                {/* Logo Preview */}
+                <div className="relative bg-slate-900/50 rounded-lg border-2 border-dashed border-slate-600/50 hover:border-purple-500/50 flex items-center justify-center overflow-hidden transition-all duration-300 group/preview" style={{ minHeight: '100px' }}>
+                  {logo?.url ? (
+                    <>
+                      <img
+                        src={logo.url}
+                        alt={logo.alt_text || `${type} logo`}
+                        className="max-w-full max-h-full object-contain p-4 group-hover/preview:scale-105 transition-transform duration-300"
+                      />
+                      <div className=" absolute top-3 right-3 px-3 py-1.5 bg-linear-to-r from-green-500/20 to-emerald-500/20 border border-green-500/50 rounded-lg text-xs text-green-300 font-semibold font-[nunito] backdrop-blur-sm">
+                        Uploaded
+                      </div>
+                    </>
+                  ) : (
+                    <div className="text-center">
+                      <div className="w-10 h-10 bg-slate-700/50 rounded-lg flex items-center justify-center mx-auto mb-2 group-hover/preview:bg-slate-700 transition-colors">
+                        <Upload className=" cursor-pointer w-5 h-5 text-slate-500" />
+                      </div>
+                      <p className="text-slate-400 text-xs font-[nunito]">No logo uploaded yet</p>
+                    </div>
+                  )}
                 </div>
-              ) : null}
 
-              {/* Action Buttons */}
-              <div className="flex gap-2">
-                {isEditing ? (
-                  <>
-                    <button
-                      onClick={() => handleSave(logo!)}
-                      disabled={updateLogoMutation.isPending}
-                      className="flex-1 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 disabled:bg-gray-400 flex items-center justify-center gap-2"
-                    >
-                      <Check className="w-4 h-4" />
-                      Save
-                    </button>
-                    <button
-                      onClick={handleCancel}
-                      className="flex-1 px-3 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 flex items-center justify-center gap-2"
-                    >
-                      <X className="w-4 h-4" />
-                      Cancel
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    {logo && (
+                {/* Upload Button */}
+                <label className="block">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleFileUpload(e, typeKey)}
+                    disabled={uploadingType === typeKey}
+                    className="hidden"
+                  />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      const input = e.currentTarget.parentElement?.querySelector('input');
+                      input?.click();
+                    }}
+                    disabled={uploadingType === typeKey}
+                    className=" cursor-pointer w-full px-2 py-1.5 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg font-semibold text-xs transition-all duration-200 flex items-center justify-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-purple-600/20 hover:shadow-purple-600/40 group/btn font-[nunito]"
+                  >
+                    {uploadingType === typeKey ? (
                       <>
-                        <button
-                          onClick={() => handleEdit(logo)}
-                          className="flex-1 px-3 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 flex items-center justify-center gap-2"
-                        >
-                          <Edit2 className="w-4 h-4" />
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => deleteLogoMutation.mutate(logo.id)}
-                          disabled={deleteLogoMutation.isPending}
-                          className="flex-1 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:bg-gray-400 flex items-center justify-center gap-2"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          Delete
-                        </button>
+                        <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span className="text-xs">Uploading...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-3.5 h-3.5 group-hover/btn:scale-110 transition-transform" />
+                        <span className="text-xs">Upload</span>
                       </>
                     )}
-                  </>
-                )}
-              </div>
+                  </button>
+                </label>
 
-              {/* Logo Info */}
-              {logo && !isEditing && (
-                <div className="mt-4 pt-4 border-t border-gray-200 text-sm text-gray-600 space-y-1">
-                  <p>
-                    <strong>Alt Text:</strong> {logo.alt_text || 'Not set'}
-                  </p>
-                  <p>
-                    <strong>Link URL:</strong> {logo.link_url || 'Not set'}
-                  </p>
-                  <p>
-                    <strong>Status:</strong>{' '}
-                    <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${
-                        logo.is_active
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}
-                    >
-                      {logo.is_active ? 'Active' : 'Inactive'}
-                    </span>
-                  </p>
-                </div>
-              )}
+                {/* Form Fields - Edit Mode */}
+                {isEditing && logo ? (
+                  <div className="space-y-2 pt-3 border-t border-slate-700/50">
+                    <div className="space-y-1">
+                      <label className="block text-xs font-semibold text-slate-300 font-[nunito]">
+                        Alt Text
+                      </label>
+                      <input
+                        type="text"
+                        value={formData[typeKey].alt_text}
+                        onChange={(e) =>
+                          handleInputChange(typeKey, 'alt_text', e.target.value)
+                        }
+                        className=" w-full px-2 py-1.5 bg-slate-900/50 border border-slate-600/50 hover:border-slate-600 focus:border-purple-500 rounded-lg text-white placeholder-slate-500 text-xs focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all duration-200 font-[nunito]"
+                        placeholder="e.g., Company Logo"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="block text-xs font-semibold text-slate-300 font-[nunito]">
+                        Link URL
+                      </label>
+                      <input
+                        type="text"
+                        value={formData[typeKey].link_url}
+                        onChange={(e) =>
+                          handleInputChange(typeKey, 'link_url', e.target.value)
+                        }
+                        className="w-full px-2 py-1.5 bg-slate-900/50 border border-slate-600/50 hover:border-slate-600 focus:border-purple-500 rounded-lg text-white placeholder-slate-500 text-xs focus:outline-none focus:ring-2 focus:ring-purple-500/20 transition-all duration-200 font-[nunito]"
+                        placeholder="https://example.com"
+                      />
+                    </div>
+                  </div>
+                ) : null}
+
+                {/* Logo Info - View Mode */}
+                {/* {logo && !isEditing && (
+                  <div className="pt-5 border-t border-slate-700/50 space-y-3 text-sm">
+                    <div className="flex justify-between items-start bg-slate-900/30 rounded-lg p-3">
+                      <span className="text-slate-400 font-[nunito]">Alt Text:</span>
+                      <span className="text-slate-200 text-right font-[nunito]">{logo.alt_text || 'Not set'}</span>
+                    </div>
+                    <div className="flex justify-between items-start bg-slate-900/30 rounded-lg p-3">
+                      <span className="text-slate-400 font-[nunito]">Link URL:</span>
+                      <span className="text-slate-200 text-right truncate font-[nunito]">{logo.link_url || 'Not set'}</span>
+                    </div>
+                  </div>
+                )} */}
+
+                {/* Action Buttons */}
+                {/* <div className="flex gap-3 pt-5 border-t border-slate-700/50">
+                  {isEditing ? (
+                    <>
+                      <button
+                        onClick={() => handleSave(logo!)}
+                        disabled={updateLogoMutation.isPending}
+                        className="flex-1 px-4 py-2.5 bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white rounded-lg font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-green-600/20 hover:shadow-green-600/40 font-[nunito]"
+                      >
+                        <Check className="w-4 h-4" />
+                        <span className="hidden sm:inline">Save</span>
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="flex-1 px-4 py-2.5 bg-slate-700/50 hover:bg-slate-700 text-white rounded-lg font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 border border-slate-600/50 font-[nunito]"
+                      >
+                        <X className="w-4 h-4" />
+                        <span className="hidden sm:inline">Cancel</span>
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      {logo && (
+                        <>
+                          <button
+                            onClick={() => handleEdit(logo)}
+                            className="flex-1 px-4 py-2.5 bg-slate-700/50 hover:bg-slate-700 text-white rounded-lg font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 border border-slate-600/50 hover:border-slate-600 font-[nunito]"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                            <span className="hidden sm:inline">Edit</span>
+                          </button>
+                          <button
+                            onClick={() => deleteLogoMutation.mutate(logo.id)}
+                            disabled={deleteLogoMutation.isPending}
+                            className="flex-1 px-4 py-2.5 bg-red-600/20 hover:bg-red-600/30 text-red-400 hover:text-red-300 rounded-lg font-semibold text-sm transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed border border-red-600/30 hover:border-red-600/50 font-[nunito]"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            <span className="hidden sm:inline">Delete</span>
+                          </button>
+                        </>
+                      )}
+                    </>
+                  )}
+                </div> */}
+              </div>
             </div>
           );
         })}
       </div>
+
+      {/* Empty State */}
+      {logos.length === 0 && (
+        <div className="text-center py-16 bg-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl">
+          <div className="w-16 h-16 bg-linear-to-br from-purple-600/20 to-pink-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Sparkles className="w-8 h-8 text-purple-400" />
+          </div>
+          <p className="text-slate-400 text-lg font-[nunito] mb-2">No logos uploaded yet</p>
+          <p className="text-slate-500 text-sm font-[nunito]">Upload your first logo to get started</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -91,6 +91,8 @@ export default function AdsManagementPage() {
   };
 
   const adPlacements = [
+    { value: 'header_image', label: 'Header Image' },
+    { value: 'footer_image', label: 'Footer Image' },
     { value: 'homepage_banner', label: 'Homepage Top Banner' },
     { value: 'homepage_mid_banner_1', label: 'Homepage Mid Banner 1' },
     { value: 'homepage_mid_banner_2', label: 'Homepage Mid Banner 2' },
