@@ -150,26 +150,42 @@ export default function AdsManagementPage() {
                 <p className="text-slate-400 mt-2">Manage future AdSense placements.</p>
               </div>
 
-              {!isEditing && (
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="cursor-pointer flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-medium shadow-lg shadow-purple-600/20"
-                >
-                  <Plus className="w-5 h-5" />
-                  Add Placement
-                </button>
-              )}
+              <button
+                onClick={() => {
+                  resetForm();
+                  setIsEditing(true);
+                }}
+                className="cursor-pointer flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-medium shadow-lg shadow-purple-600/20"
+              >
+                <Plus className="w-5 h-5" />
+                Add Placement
+              </button>
             </div>
 
-
-            {/* Form */}
+            {/* Add / Edit modal */}
             {isEditing && (
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl animate-in fade-in slide-in-from-top-4 duration-300">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-white">
+              <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                <div
+                  className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                  onClick={() => { setIsEditing(false); resetForm(); }}
+                  aria-hidden
+                />
+                <div
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="ad-placement-modal-title"
+                  className="relative bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                <div className="flex items-center justify-between mb-6 sticky top-0 bg-slate-900 pb-2 z-10">
+                  <h2 id="ad-placement-modal-title" className="text-xl font-bold text-white">
                     {currentAd.id ? 'Edit Placement' : 'New Ad Placement'}
                   </h2>
-                  <button onClick={() => { setIsEditing(false); resetForm(); }} className="p-2 hover:bg-slate-800 rounded-full text-slate-400">
+                  <button
+                    type="button"
+                    onClick={() => { setIsEditing(false); resetForm(); }}
+                    className="p-2 hover:bg-slate-800 rounded-full text-slate-400"
+                  >
                     <X className="cursor-pointer w-6 h-6" />
                   </button>
                 </div>
@@ -343,6 +359,7 @@ export default function AdsManagementPage() {
                     </button>
                   </div>
                 </form>
+                </div>
               </div>
             )}
 
@@ -422,7 +439,10 @@ export default function AdsManagementPage() {
                   <Megaphone className="w-12 h-12 text-slate-700 mx-auto mb-4" />
                   <p className="text-slate-400">No ad placements configured yet.</p>
                   <button
-                    onClick={() => setIsEditing(true)}
+                    onClick={() => {
+                      resetForm();
+                      setIsEditing(true);
+                    }}
                     className="cursor-pointer mt-4 text-purple-500 hover:text-purple-400 font-bold"
                   >
                     Create your first placement
