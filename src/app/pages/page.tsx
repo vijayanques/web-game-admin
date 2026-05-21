@@ -50,7 +50,7 @@ export default function PagesPage() {
               <div className="w-10" />
             </div>
 
-            <div className="p-6">
+            <div className="max-w-7xl mx-auto space-y-8 p-4 sm:p-6 lg:p-8">
               <div className="flex justify-between items-center mb-6">
                 <div>
                   <h1 className="text-2xl font-bold text-white mb-2">Page SEO Metadata</h1>

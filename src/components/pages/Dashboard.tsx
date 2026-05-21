@@ -177,7 +177,7 @@ export default function Dashboard() {
       <div className="fixed bottom-20 right-10 w-80 h-80 rounded-full bg-pink-600/6 blur-[100px] pointer-events-none animate-pulse" style={{ animationDuration: '6s', animationDelay: '2s' }} />
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-blue-600/4 blur-[120px] pointer-events-none" />
 
-      <div className="relative z-10 p-4 sm:p-6 md:p-8 space-y-6 sm:space-y-8">
+      <div className="max-w-7xl mx-auto space-y-8 p-4 sm:p-6 lg:p-8">
 
         {/* ── Header ── */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

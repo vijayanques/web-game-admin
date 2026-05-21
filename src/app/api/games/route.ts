@@ -30,11 +30,19 @@ export async function GET(request: NextRequest) {
         g.game_url as url,
         g.rating,
         g.is_active,
+        g.created_at as createdAt,
         c.name as tag,
-        c.slug as category_slug
+        c.slug as category_slug,
+        COALESCE(COUNT(DISTINCT gl.id), 0) as likeCount,
+        COALESCE(COUNT(DISTINCT gd.id), 0) as dislikeCount,
+        COALESCE(COUNT(DISTINCT r.id), 0) as reviewCount
       FROM games g
       LEFT JOIN categories c ON g.category_id = c.id
+      LEFT JOIN game_likes gl ON g.id = gl.gameId
+      LEFT JOIN game_dislikes gd ON g.id = gd.gameId
+      LEFT JOIN reviews r ON g.id = r.gameId
       WHERE g.is_active = 1
+      GROUP BY g.id
     `;
 
     const params: any[] = [];
@@ -63,9 +71,12 @@ export async function GET(request: NextRequest) {
 
     const [games] = await pool.query<any[]>(query, params);
 
-    // Enrich games with additional data
-    const enrichedGames = games.map(game => ({
+    // Enrich games with additional data and type conversions
+    const enrichedGames = games.map((game: any) => ({
       ...game,
+      likeCount: parseInt(game.likeCount || '0'),
+      dislikeCount: parseInt(game.dislikeCount || '0'),
+      reviewCount: parseInt(game.reviewCount || '0'),
       players: `${Math.floor(Math.random() * 5000) + 500}`, // TODO: Calculate from user_activity
       bg: 'from-orange-500 to-red-700' // Default gradient
     }));

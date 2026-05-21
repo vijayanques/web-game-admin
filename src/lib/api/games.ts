@@ -18,6 +18,9 @@ export interface Game {
   isActive: boolean;
   createdAt: string;
   updatedAt?: string;
+  likeCount?: number;
+  dislikeCount?: number;
+  reviewCount?: number;
 }
 
 export interface CreateGamePayload {

@@ -106,7 +106,7 @@ export default function UsersPage() {
           </div>
 
           <div className="flex-1">
-            <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900 min-h-screen">
+            <div className="max-w-7xl mx-auto space-y-8 p-4 sm:p-6 lg:p-8">
               {/* Header Section */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">

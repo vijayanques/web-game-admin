@@ -8,10 +8,16 @@ import UpdateGameDrawer from './UpdateGameDrawer';
 import DeleteGameModal from './DeleteGameModal';
 import { Game } from '@/lib/api/games';
 
+type GameWithCounts = Game & {
+  likeCount?: number;
+  dislikeCount?: number;
+  reviewCount?: number;
+};
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://192.168.1.118:8000';
 
-const fetchGames = async (): Promise<Game[]> => {
-  const response = await fetch(`${API_BASE_URL}/api/games`);
+const fetchGames = async (): Promise<GameWithCounts[]> => {
+  const response = await fetch(`${API_BASE_URL}/api/games?admin=true`);
   const data = await response.json();
   if (!data.success) {
     throw new Error('Failed to fetch games');
@@ -39,9 +45,9 @@ export default function GamesGrid({ onGameCreated }: GamesGridProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [updateDrawerOpen, setUpdateDrawerOpen] = useState(false);
-  const [selectedGame, setSelectedGame] = useState<Game | undefined>();
+  const [selectedGame, setSelectedGame] = useState<GameWithCounts | undefined>();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [gameToDelete, setGameToDelete] = useState<Game | undefined>();
+  const [gameToDelete, setGameToDelete] = useState<GameWithCounts | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12);
 
@@ -275,9 +281,28 @@ export default function GamesGrid({ onGameCreated }: GamesGridProps) {
                 </div>
 
                 {/* Game Stats */}
-                <div className="flex items-center gap-1.5 sm:gap-2 font-semibold text-[10px] sm:text-xs text-slate-500 font-[nunito]">
-                  <Calendar className="w-3 h-3 shrink-0" />
-                  <span className="truncate">Added recently</span>
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-1.5 sm:gap-2 font-semibold text-[10px] sm:text-xs text-slate-500 font-[nunito]">
+                    <Calendar className="w-3 h-3 shrink-0" />
+                    <span className="truncate">
+                      {game.createdAt
+                        ? `Added ${new Date(game.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`
+                        : 'Added recently'}
+                    </span>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 text-[10px] sm:text-xs text-slate-400 font-[nunito]">
+                    <span className="rounded-full bg-amber-500/15 px-2 py-1 text-amber-300 font-semibold">
+                      {(game.reviewCount ?? 0) > 0
+                        ? `★ ${(game.rating > 5 ? game.rating / 2 : game.rating).toFixed(1)} · ${game.reviewCount} review${game.reviewCount === 1 ? '' : 's'}`
+                        : 'No reviews yet'}
+                    </span>
+                    <span className="rounded-full bg-slate-800/60 px-2 py-1 text-white font-semibold">
+                      {game.likeCount ?? 0} like{(game.likeCount ?? 0) === 1 ? '' : 's'}
+                    </span>
+                    <span className="rounded-full bg-slate-800/60 px-2 py-1 text-white font-semibold">
+                      {game.dislikeCount ?? 0} dislike{(game.dislikeCount ?? 0) === 1 ? '' : 's'}
+                    </span>
+                  </div>
                 </div>
 
                 {/* Action Buttons (Mobile) */}
