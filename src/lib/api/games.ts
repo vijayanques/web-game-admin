@@ -1,6 +1,7 @@
 import { apiClient } from './client';
+import type { GameDetailContent } from '@/types/gameDetailContent';
 
-export interface Game {
+export interface Game extends Partial<GameDetailContent> {
   id: number;
   title: string;
   slug?: string;
@@ -15,6 +16,7 @@ export interface Game {
   videoUrl?: string;
   gameUrl: string;
   description: string;
+  releaseDate?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt?: string;

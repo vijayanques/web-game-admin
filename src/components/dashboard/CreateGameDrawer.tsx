@@ -5,6 +5,12 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import SeoMetadataForm from '@/components/SeoMetadataForm';
+import GameDetailContentForm from '@/components/dashboard/GameDetailContentForm';
+import {
+  emptyGameDetailContent,
+  appendGameDetailToFormData,
+  type GameDetailContent,
+} from '@/types/gameDetailContent';
 
 interface CreateGameDrawerProps {
   isOpen: boolean;
@@ -60,6 +66,8 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
   const [videoPreview, setVideoPreview] = useState<string>('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [createdGameId, setCreatedGameId] = useState<number | null>(null);
+  const [drawerTab, setDrawerTab] = useState<'basic' | 'detail'>('basic');
+  const [detailContent, setDetailContent] = useState<GameDetailContent>(emptyGameDetailContent());
 
   // Fetch categories
   const { data: categories = [] } = useQuery({
@@ -88,6 +96,8 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
       setThumbnailPreview('');
       setVideoFile(null);
       setVideoPreview('');
+      setDetailContent(emptyGameDetailContent());
+      setDrawerTab('basic');
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to create game');
@@ -189,6 +199,8 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
       submitData.append('video', videoFile);
     }
 
+    appendGameDetailToFormData(submitData, detailContent);
+
     createGameMutation.mutate(submitData);
   };
 
@@ -203,7 +215,7 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
       />
 
       {/* Drawer */}
-      <div className="absolute right-0 top-0 h-full w-full max-w-sm sm:max-w-md bg-slate-900 border-l border-slate-700 shadow-xl flex flex-col animate-in slide-in-from-right duration-300">
+      <div className="absolute right-0 top-0 h-full w-full max-w-2xl bg-slate-900 border-l border-slate-700 shadow-xl flex flex-col animate-in slide-in-from-right duration-300">
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-700 sticky top-0 bg-slate-900/95 backdrop-blur-sm z-10">
           <h2 className="text-lg sm:text-xl font-bold text-white font-[nunito]">Create Game</h2>
@@ -215,11 +227,32 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
           </button>
         </div>
 
+        <div className="flex border-b border-slate-700 px-4 gap-1">
+          {(['basic', 'detail'] as const).map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setDrawerTab(tab)}
+              className={`px-4 py-2.5 text-sm font-semibold font-[nunito] border-b-2 transition-colors ${
+                drawerTab === tab
+                  ? 'border-purple-500 text-purple-400'
+                  : 'border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              {tab === 'basic' ? 'Basic Info' : 'Detail Page Content'}
+            </button>
+          ))}
+        </div>
+
         {/* Content */}
         <div 
           className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4"
           onScroll={(e) => setIsScrolled((e.target as HTMLDivElement).scrollTop > 0)}
         >
+          {drawerTab === 'detail' ? (
+            <GameDetailContentForm value={detailContent} onChange={setDetailContent} />
+          ) : (
+          <>
           <div>
             <label className="block text-xs sm:text-sm font-semibold text-slate-300 mb-2">
               Game Title *
@@ -407,6 +440,8 @@ export default function CreateGameDrawer({ isOpen, onClose }: CreateGameDrawerPr
               <p className="text-xs text-slate-400">Create the game first to add SEO metadata</p>
             )}
           </div>
+          </>
+          )}
         </div>
 
         {/* Footer */}

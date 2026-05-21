@@ -7,7 +7,13 @@ import { Game, gameAPI } from '@/lib/api/games';
 import { categoryAPI } from '@/lib/api/categories';
 import toast from 'react-hot-toast';
 import SeoMetadataForm from '@/components/SeoMetadataForm';
+import GameDetailContentForm from '@/components/dashboard/GameDetailContentForm';
 import { uploadToCloudinary } from '@/lib/cloudinary-upload';
+import {
+  gameDetailContentFromApi,
+  appendGameDetailToFormData,
+  type GameDetailContent,
+} from '@/types/gameDetailContent';
 
 interface UpdateGameDrawerProps {
   isOpen: boolean;
@@ -48,6 +54,10 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
   const [twitterImageUploading, setTwitterImageUploading] = useState(false);
   const [ogImagePreview, setOgImagePreview] = useState<string>('');
   const [twitterImagePreview, setTwitterImagePreview] = useState<string>('');
+  const [drawerTab, setDrawerTab] = useState<'basic' | 'detail'>('basic');
+  const [detailContent, setDetailContent] = useState<GameDetailContent>(
+    gameDetailContentFromApi()
+  );
 
   // Fetch categories
   const { data: categories = [], isLoading: categoriesLoading } = useQuery({
@@ -100,9 +110,21 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
 
       setThumbnailPreview(game.thumbnail || '');
       setVideoPreview(game.videoUrl || '');
+      setDetailContent(gameDetailContentFromApi(game));
+      setDrawerTab('basic');
       setErrors({});
     }
   }, [game]);
+
+  // Load full game detail fields when drawer opens
+  useEffect(() => {
+    if (!isOpen || !game?.id) return;
+    gameAPI.getGameById(game.id).then((full) => {
+      setDetailContent(gameDetailContentFromApi(full));
+    }).catch(() => {
+      setDetailContent(gameDetailContentFromApi(game));
+    });
+  }, [isOpen, game?.id]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
@@ -277,6 +299,8 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
       submitData.append('seoMetadata', JSON.stringify(seoMetadata));
     }
 
+    appendGameDetailToFormData(submitData, detailContent);
+
     updateMutation.mutate(submitData);
   };
 
@@ -288,11 +312,11 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
       <div className="absolute inset-0 bg-black/50 transition-opacity" onClick={onClose} />
 
       {/* Drawer */}
-      <div className="absolute right-0 top-0 h-full w-full max-w-md bg-slate-900 border-l border-slate-700 shadow-xl flex flex-col animate-in slide-in-from-right duration-300">
+      <div className="absolute right-0 top-0 h-full w-full max-w-2xl bg-slate-900 border-l border-slate-700 shadow-xl flex flex-col animate-in slide-in-from-right duration-300">
 
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-slate-700">
-          <h2 className="text-xl font-bold text-white">Update Game</h2>
+          <h2 className="text-xl font-bold text-white font-[nunito]">Update Game</h2>
           <button
             onClick={onClose}
             className="p-1 hover:bg-slate-800 rounded-lg transition-colors"
@@ -301,9 +325,31 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
           </button>
         </div>
 
+        {/* Tabs */}
+        <div className="flex border-b border-slate-700 px-4 gap-1">
+          {(['basic', 'detail'] as const).map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setDrawerTab(tab)}
+              className={`px-4 py-2.5 text-sm font-semibold font-[nunito] border-b-2 transition-colors ${
+                drawerTab === tab
+                  ? 'border-purple-500 text-purple-400'
+                  : 'border-transparent text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              {tab === 'basic' ? 'Basic Info' : 'Detail Page Content'}
+            </button>
+          ))}
+        </div>
+
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6 space-y-4">
 
+          {drawerTab === 'detail' ? (
+            <GameDetailContentForm value={detailContent} onChange={setDetailContent} />
+          ) : (
+          <>
           {/* Title */}
           <div>
             <label className="block text-sm font-semibold text-slate-300 mb-2">
@@ -575,6 +621,8 @@ export default function UpdateGameDrawer({ isOpen, onClose, game }: UpdateGameDr
                 entitySlug={formData.slug || game.slug}
               />
             </div>
+          )}
+          </>
           )}
 
         </div>
