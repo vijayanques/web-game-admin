@@ -115,11 +115,21 @@ export default function GameDetailContentForm({ value, onChange }: GameDetailCon
         </div>
       </Section>
 
-      <Section title="Categories & tags" icon={Tag}>
+      {/* <Section title="Categories & tags" icon={Tag}>
         {value.tags.map((tag, i) => (
-          <div key={i} className="flex gap-2 items-start">
+          <div key={i} className="p-3 rounded-lg bg-slate-900/50 border border-slate-700/50 space-y-2">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-xs text-purple-400 font-bold">Tag {i + 1}</span>
+              <button
+                type="button"
+                onClick={() => patch({ tags: value.tags.filter((_, idx) => idx !== i) })}
+                className="p-1 text-rose-400 hover:bg-rose-500/10 rounded"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
             <input
-              className={`${inputClass} flex-1`}
+              className={`${inputClass}`}
               placeholder="Tag name"
               value={tag.label}
               onChange={(e) => updateTag(i, 'label', e.target.value)}
@@ -127,28 +137,27 @@ export default function GameDetailContentForm({ value, onChange }: GameDetailCon
             <input
               type="number"
               min={0}
-              className={`${inputClass} w-24`}
-              placeholder="Count"
+              className={`${inputClass}`}
+              placeholder="Count (display number)"
               value={tag.count}
               onChange={(e) => updateTag(i, 'count', Number(e.target.value) || 0)}
             />
-            <button
-              type="button"
-              onClick={() => patch({ tags: value.tags.filter((_, idx) => idx !== i) })}
-              className="p-2 text-rose-400 hover:bg-rose-500/10 rounded-lg"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+            <textarea
+              className={`${inputClass} resize-y min-h-[60px]`}
+              placeholder="Tag description (optional)"
+              value={tag.description || ''}
+              onChange={(e) => updateTag(i, 'description', e.target.value)}
+            />
           </div>
         ))}
         <button
           type="button"
-          onClick={() => patch({ tags: [...value.tags, { label: '', count: 0 }] })}
+          onClick={() => patch({ tags: [...value.tags, { label: '', count: 0, description: '' }] })}
           className="flex items-center gap-1 text-xs text-purple-400 hover:text-purple-300 font-medium"
         >
           <Plus className="w-3.5 h-3.5" /> Add tag
         </button>
-      </Section>
+      </Section> */}
 
       <Section title="How to play" icon={ListOrdered}>
         {value.howToPlay.map((step, i) => (

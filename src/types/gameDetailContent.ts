@@ -11,6 +11,7 @@ export interface GameModeItem {
 export interface GameTagItem {
   label: string;
   count: number;
+  description?: string;
 }
 
 export interface GameControlItem {
@@ -56,7 +57,13 @@ export const gameDetailContentFromApi = (data?: Partial<GameDetailContent> | nul
   tips: Array.isArray(data?.tips) ? data.tips : [],
   features: Array.isArray(data?.features) ? data.features : [],
   controls: Array.isArray(data?.controls) ? data.controls : [],
-  tags: Array.isArray(data?.tags) ? data.tags : [],
+  tags: Array.isArray(data?.tags) 
+    ? data.tags.map(tag => ({
+        label: tag.label || '',
+        count: tag.count ?? 0,
+        description: tag.description || ''
+      }))
+    : [],
 });
 
 export const appendGameDetailToFormData = (formData: FormData, content: GameDetailContent) => {
