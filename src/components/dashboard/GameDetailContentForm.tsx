@@ -160,6 +160,15 @@ export default function GameDetailContentForm({ value, onChange }: GameDetailCon
       </Section> */}
 
       <Section title="How to play" icon={ListOrdered}>
+        <div className="space-y-2 mb-4">
+          <label className="block text-xs font-medium text-slate-300">Description</label>
+          <textarea
+            className={`${inputClass} resize-y min-h-[80px]`}
+            placeholder="Add a description for How to Play"
+            value={value.howToPlayDescription}
+            onChange={(e) => patch({ howToPlayDescription: e.target.value })}
+          />
+        </div>
         {value.howToPlay.map((step, i) => (
           <div key={i} className="p-3 rounded-lg bg-slate-900/50 border border-slate-700/50 space-y-2">
             <div className="flex justify-between items-center">

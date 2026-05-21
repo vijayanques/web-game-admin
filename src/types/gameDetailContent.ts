@@ -24,6 +24,7 @@ export interface GameDetailContent {
   technology: string;
   platforms: string[];
   wiki: string;
+  howToPlayDescription: string;
   howToPlay: HowToPlayStep[];
   gameModes: GameModeItem[];
   tips: string[];
@@ -37,6 +38,7 @@ export const emptyGameDetailContent = (): GameDetailContent => ({
   technology: 'HTML5',
   platforms: ['Browser (desktop, mobile, tablet)'],
   wiki: '',
+  howToPlayDescription: '',
   howToPlay: [],
   gameModes: [],
   tips: [],
@@ -52,12 +54,13 @@ export const gameDetailContentFromApi = (data?: Partial<GameDetailContent> | nul
     ? data.platforms
     : ['Browser (desktop, mobile, tablet)'],
   wiki: data?.wiki ?? '',
+  howToPlayDescription: data?.howToPlayDescription ?? '',
   howToPlay: Array.isArray(data?.howToPlay) ? data.howToPlay : [],
   gameModes: Array.isArray(data?.gameModes) ? data.gameModes : [],
   tips: Array.isArray(data?.tips) ? data.tips : [],
   features: Array.isArray(data?.features) ? data.features : [],
   controls: Array.isArray(data?.controls) ? data.controls : [],
-  tags: Array.isArray(data?.tags) 
+  tags: Array.isArray(data?.tags)
     ? data.tags.map(tag => ({
         label: tag.label || '',
         count: tag.count ?? 0,
@@ -77,4 +80,5 @@ export const appendGameDetailToFormData = (formData: FormData, content: GameDeta
   formData.append('features', JSON.stringify(content.features.filter(Boolean)));
   formData.append('controls', JSON.stringify(content.controls));
   formData.append('tags', JSON.stringify(content.tags));
+  formData.append('howToPlayDescription', content.howToPlayDescription);
 };
