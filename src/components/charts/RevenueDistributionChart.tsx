@@ -59,7 +59,7 @@ export default function RevenueDistributionChart({ data }: RevenueDistributionCh
               fontFamily: 'Helvetica, Arial, sans-serif',
               color: '#ffffff',
               offsetY: 16,
-              formatter: (val: string) => `${parseFloat(val).toFixed(1)}%`,
+              formatter: (val: string) => `${parseFloat(val).toFixed(2)}%`,
             },
             total: {
               show: true,
@@ -96,7 +96,7 @@ export default function RevenueDistributionChart({ data }: RevenueDistributionCh
         fontSize: '12px',
       },
       y: {
-        formatter: (value: number) => `${value.toFixed(1)}%`,
+        formatter: (value: number) => `${value.toFixed(2)}%`,
       },
     },
     responsive: [

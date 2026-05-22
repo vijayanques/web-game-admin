@@ -200,7 +200,7 @@ export default function ActivePlayersChart({ data }: ActivePlayersChartProps) {
     },
     dataLabels: {
       enabled: true,
-      formatter: (v: number) => `${v}%`,
+      formatter: (v: number) => `${v.toFixed(2)}%`,
       style: {
         fontSize: '11px',
         fontFamily: 'nunito',
